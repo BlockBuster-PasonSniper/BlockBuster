@@ -1,88 +1,94 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Received Image Display</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            color: #666;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        color: #666;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>수신된 이미지 정보</h1>
-        <p id="title"></p>
-        <p id="description"></p>
-        <p id="imageDescription"></p>
-        <img id="displayImage" src="" alt="수신된 이미지">
+      <h1>수신된 이미지 정보</h1>
+      <p id="title"></p>
+      <p id="description"></p>
+      <p id="imageDescription"></p>
+      <img id="displayImage" src="" alt="수신된 이미지" />
     </div>
 
     <script>
-        async function fetchDataAndDisplay() {
-            try {
-                const response = await fetch('data.json');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                const data = await response.json();
-                
-                document.getElementById('title').textContent = '제목: ' + (data.title || 'N/A');
-                document.getElementById('description').textContent = '설명: ' + (data.description || 'N/A');
-                document.getElementById('imageDescription').textContent = '이미지 설명: ' + (data.imageDescription || 'N/A');
-                
-                const imgElement = document.getElementById('displayImage');
-                if (data.imageUrl) {
-                    imgElement.src = data.imageUrl;
-                    imgElement.alt = data.imageDescription || '수신된 이미지';
-                    imgElement.style.display = ''; // Show image
-                } else {
-                    imgElement.style.display = 'none'; // Hide image if no URL
-                }
-            } catch (error) {
-                console.error('데이터를 불러오는 중 오류 발생:', error);
-                document.getElementById('title').textContent = '오류: 데이터를 불러올 수 없습니다.';
-                document.getElementById('description').textContent = '';
-                document.getElementById('imageDescription').textContent = '';
-                document.getElementById('displayImage').style.display = 'none';
-            }
+      async function fetchDataAndDisplay() {
+        try {
+          const response = await fetch("data.json");
+          if (!response.ok) {
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+          const data = await response.json();
+
+          document.getElementById("title").textContent =
+            "제목: " + (data.title || "N/A");
+          document.getElementById("description").textContent =
+            "설명: " + (data.description || "N/A");
+          document.getElementById("imageDescription").textContent =
+            "이미지 설명: " + (data.imageDescription || "N/A");
+
+          const imgElement = document.getElementById("displayImage");
+          if (data.imageUrl) {
+            imgElement.src = data.imageUrl;
+            imgElement.alt = data.imageDescription || "수신된 이미지";
+            imgElement.style.display = ""; // Show image
+          } else {
+            imgElement.style.display = "none"; // Hide image if no URL
+          }
+        } catch (error) {
+          console.error("데이터를 불러오는 중 오류 발생:", error);
+          document.getElementById("title").textContent =
+            "오류: 데이터를 불러올 수 없습니다.";
+          document.getElementById("description").textContent = "";
+          document.getElementById("imageDescription").textContent = "";
+          document.getElementById("displayImage").style.display = "none";
         }
+      }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initial fetch and display
-            fetchDataAndDisplay();
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initial fetch and display
+        fetchDataAndDisplay();
 
-            // Fetch and display data every 3 seconds
-            setInterval(fetchDataAndDisplay, 3000); // 3000ms = 3 seconds
-        });
+        // Fetch and display data every 3 seconds
+        setInterval(fetchDataAndDisplay, 1500); // 1500ms = 1.5 seconds
+      });
     </script>
-</body>
+  </body>
 </html>
