@@ -12,20 +12,25 @@ const port = 3000;
 
 // --- 미들웨어 ---
 // JSON 요청 본문을 파싱하기 위한 미들웨어 (필수! 외부 JSON을 받기 위함)
-app.use(express.json({ limit: "20mb" }));
+// 이미지 데이터 전송을 위해 limit를 50mb로 늘림
+app.use(express.json({ limit: "50mb" }));
 
 // 'public' 디렉토리의 정적 파일들(html, 최종 data.json)을 제공
 app.use(express.static(path.join(__dirname, "public")));
 
 // --- 경로 설정 ---
-const DUMMY_DIR = path.join(__dirname, "dummy");
 const PUBLIC_DIR = path.join(__dirname, "public");
+const UPLOADS_DIR = path.join(PUBLIC_DIR, "uploads"); // 이미지 저장할 폴더
 const OUTPUT_JSON_PATH = path.join(PUBLIC_DIR, "data.json");
 
 // --- 서버 시작 시 초기 설정 (public 폴더 생성 등) ---
 // public 폴더가 없으면 생성
 if (!fs.existsSync(PUBLIC_DIR)) {
   fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+}
+// public/uploads 폴더가 없으면 생성
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
 // --- API 엔드포인트: 외부에서 JSON을 받아 처리 ---
@@ -35,29 +40,23 @@ app.post("/api/receive-json", async (req, res) => {
   let receivedData = req.body; // 외부에서 받은 JSON 데이터
 
   try {
-    // 1. dummy 폴더를 스캔하여 .jpg 파일을 동적으로 찾기
-    const allFiles = fs.readdirSync(DUMMY_DIR);
-    const jpgFile = allFiles.find((file) =>
-      file.toLowerCase().endsWith(".jpg")
-    );
+    const { imageData, imageFileName, imageDescription } = receivedData;
 
-    if (!jpgFile) {
-      throw new Error("dummy 폴더에서 JPG 파일을 찾을 수 없습니다.");
+    if (!imageData || !imageFileName) {
+      throw new Error("이미지 데이터(imageData)와 파일 이름(imageFileName)이 필요합니다.");
     }
-    const DUMMY_IMAGE_PATH = path.join(DUMMY_DIR, jpgFile);
 
-    // 2. 찾은 이미지 파일을 읽어서 Base64 데이터 URL로 변환
-    const imageBuffer = fs.readFileSync(DUMMY_IMAGE_PATH);
-    const base64Image = `data:image/jpeg;base64,${imageBuffer.toString(
-      "base64"
-    )}`;
-    console.log(`'${jpgFile}' 이미지를 Base64로 변환했습니다.`);
+    // Base64 데이터에서 'data:image/jpeg;base64,' 부분 제거
+    const base64Image = imageData.split(';base64,').pop();
+    const imageBuffer = Buffer.from(base64Image, 'base64');
 
-    // 3. 받은 JSON 데이터에 이미지 정보를 추가
-    receivedData.imageData = base64Image;
-    receivedData.imageFileName = jpgFile; // 어떤 파일이 변환되었는지 이름도 추가
-    receivedData.imageDescription =
-      receivedData.imageDescription || `${path.parse(jpgFile).name} 이미지`; // 외부 JSON에 설명이 없으면 파일 이름으로 설정
+    const imagePathInUploads = path.join(UPLOADS_DIR, imageFileName);
+    fs.writeFileSync(imagePathInUploads, imageBuffer);
+    console.log(`'${imageFileName}' 이미지를 '${imagePathInUploads}'에 저장했습니다.`);
+
+    // 최종 JSON에 이미지 정보 추가 (public 경로 기준)
+    receivedData.imageUrl = `/uploads/${imageFileName}`;
+    receivedData.imageDescription = imageDescription || `${path.parse(imageFileName).name} 이미지`;
 
     // 4. 최종 결과물을 public/data.json 파일로 저장
     fs.writeFileSync(
