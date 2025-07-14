@@ -59,3 +59,6 @@ except Exception as e:
         "message": str(e)
     }
     print(json.dumps(error_result, ensure_ascii=False))
+
+with open("ai_result.json", "w", encoding="utf-8") as f:
+    json.dump(result, f, ensure_ascii=False, indent=2)
