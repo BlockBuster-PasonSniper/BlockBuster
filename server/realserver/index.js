@@ -35,7 +35,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 
 // --- API 엔드포인트: 외부에서 JSON을 받아 처리 ---
 app.post("/api/receive-json", async (req, res) => {
-  console.log("외부로부터 JSON 데이터 수신:", req.body);
+  // console.log("외부로부터 JSON 데이터 수신:", req.body);
 
   let receivedData = req.body; // 외부에서 받은 JSON 데이터
 
@@ -43,20 +43,25 @@ app.post("/api/receive-json", async (req, res) => {
     const { imageData, imageFileName, imageDescription } = receivedData;
 
     if (!imageData || !imageFileName) {
-      throw new Error("이미지 데이터(imageData)와 파일 이름(imageFileName)이 필요합니다.");
+      throw new Error(
+        "이미지 데이터(imageData)와 파일 이름(imageFileName)이 필요합니다."
+      );
     }
 
     // Base64 데이터에서 'data:image/jpeg;base64,' 부분 제거
-    const base64Image = imageData.split(';base64,').pop();
-    const imageBuffer = Buffer.from(base64Image, 'base64');
+    const base64Image = imageData.split(";base64,").pop();
+    const imageBuffer = Buffer.from(base64Image, "base64");
 
     const imagePathInUploads = path.join(UPLOADS_DIR, imageFileName);
     fs.writeFileSync(imagePathInUploads, imageBuffer);
-    console.log(`'${imageFileName}' 이미지를 '${imagePathInUploads}'에 저장했습니다.`);
+    console.log(
+      `'${imageFileName}' 이미지를 '${imagePathInUploads}'에 저장했습니다.`
+    );
 
     // 최종 JSON에 이미지 정보 추가 (public 경로 기준)
     receivedData.imageUrl = `/uploads/${imageFileName}`;
-    receivedData.imageDescription = imageDescription || `${path.parse(imageFileName).name} 이미지`;
+    receivedData.imageDescription =
+      imageDescription || `${path.parse(imageFileName).name} 이미지`;
 
     // 4. 최종 결과물을 public/data.json 파일로 저장
     fs.writeFileSync(
@@ -68,9 +73,11 @@ app.post("/api/receive-json", async (req, res) => {
       `성공! 이미지 데이터가 포함된 최종 JSON 파일을 생성했습니다: ${OUTPUT_JSON_PATH}`
     );
 
-    res
-      .status(200)
-      .json({ success: true, message: "데이터가 성공적으로 처리되었습니다." });
+    res.status(200).json({
+      success: true,
+      message: `이미지 '${imageFileName}' 처리 완료`,
+      imageUrl: receivedData.imageUrl,
+    });
   } catch (error) {
     console.error("데이터 처리 중 오류 발생:", error.message);
     res.status(500).json({
