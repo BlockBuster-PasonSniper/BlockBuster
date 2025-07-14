@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>이미지 & 데이터 테이블 뷰어</title>
+  <style>
+    body { 
+      font-family: 'Malgun Gothic', sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      margin: 0; 
+      padding: 20px;
+      background-color: #f0f2f5; 
+      color: #333; 
+    }
+    h1 { 
+      border-bottom: 3px solid #1877f2; 
+      padding-bottom: 10px; 
+      color: #1c1e21;
+    }
+    #contentContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    #imageContainer, #tableContainer {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex: 1; 
+      min-width: 320px;
+    }
+    #displayImage {
+      width: 100%;
+      border-radius: 5px;
+      display: none; /* 초기에는 숨김 */
+    }
+    #dataTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    #dataTable th, #dataTable td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    #dataTable th {
+      background-color: #f5f6f7;
+      font-weight: bold;
+      width: 30%;
+    }
+    #statusText {
+        font-size: 1.5em;
+        color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="main-title">데이터 로딩 중...</h1>
+  
+  <div id="contentContainer">
+    <div id="imageContainer">
+      <img id="displayImage">
+    </div>
+    <div id="tableContainer">
+      <p id="statusText">데이터를 기다리는 중...</p>
+      <table id="dataTable"></table>
+    </div>
+  </div>
+
+<script>
+  const mainTitle = document.getElementById('main-title');
+  const displayImage = document.getElementById('displayImage');
+  const dataTable = document.getElementById('dataTable');
+  const statusText = document.getElementById('statusText');
+
+  async function loadData() {
+    try {
+      const response = await fetch('data.json');
+      if (!response.ok) throw new Error(`HTTP 오류! 상태: ${response.status}`);
+      const data = await response.json();
+
+      if (data.imageData) {
+        // 1. 제목 및 이미지 설정
+        mainTitle.textContent = `'${data.imageFileName || "이미지"}' 정보`;
+        displayImage.src = data.imageData;
+        displayImage.alt = data.imageDescription || '이미지';
+        displayImage.style.display = 'block';
+
+        // 2. 테이블 데이터 동적 생성
+        if (data.attributes && Array.isArray(data.attributes)) {
+          const tableBody = data.attributes.map(attr => 
+            `<tr><th>${attr.property}</th><td>${attr.value}</td></tr>`
+          ).join('');
+          dataTable.innerHTML = `<tbody>${tableBody}</tbody>`;
+        }
+        
+        statusText.style.display = 'none';
+      } else {
+        statusText.textContent = 'JSON 파일에 이미지 데이터가 없습니다.';
+      }
+    } catch (error) {
+      console.error('데이터 로딩 실패:', error);
+      mainTitle.textContent = '데이터 로딩 실패';
+      statusText.textContent = '데이터를 불러오는 데 실패했습니다.';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadData);
+</script>
+
+</body>
+</html>
