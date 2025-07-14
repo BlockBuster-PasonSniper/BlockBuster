@@ -9,7 +9,7 @@
 plugins {
     // Kotlin JVM 프로젝트로 설정 (버전은 현재 설치된 Kotlin과 맞춰줌)
     kotlin("jvm") version "1.9.23"
-
+    kotlin("plugin.serialization") version "1.9.23"
     // 애플리케이션으로 실행 가능하게 해주는 플러그인
     application
 }
@@ -28,18 +28,25 @@ repositories {
 
 // 프로젝트에 사용할 의존성(라이브러리) 설정
 dependencies {
-    // Ktor의 핵심 서버 기능 (라우팅, 요청 처리 등)
     implementation("io.ktor:ktor-server-core:2.3.3")
-
-    // 실제 HTTP 서버로 실행하기 위한 엔진(Netty 기반)
     implementation("io.ktor:ktor-server-netty:2.3.3")
 
-    // JSON 등 데이터를 직렬화하고 요청/응답을 처리할 수 있는 플러그인
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.3")
+    
 
-    // JSON 처리를 위한 직렬화 방식으로 Gson 사용 (Ktor에서 자동 변환)
-    implementation("io.ktor:ktor-serialization-gson:2.3.3")
+    // ✅ Ktor Client + JSON 직렬화 관련 의존성
+    implementation("io.ktor:ktor-client-core:2.3.3")
+    implementation("io.ktor:ktor-client-cio:2.3.3")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
 
-    // 서버 실행 시 로그를 출력하기 위한 로깅 프레임워크 (필수는 아니지만 유용함)
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    // ✅ kotlinx.serialization (buildJsonObject, Json 등)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
+
