@@ -2,6 +2,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 // --- 기본 설정 ---
 const __filename = fileURLToPath(import.meta.url);
@@ -11,6 +12,9 @@ const app = express();
 const port = 3000;
 
 // --- 미들웨어 ---
+// CORS 설정 (모든 도메인에서 접근 허용)
+app.use(cors());
+
 // JSON 요청 본문을 파싱하기 위한 미들웨어 (필수! 외부 JSON을 받기 위함)
 // 이미지 데이터 전송을 위해 limit를 50mb로 늘림
 app.use(express.json({ limit: "50mb" }));
@@ -33,50 +37,126 @@ if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
+console.log("💾 서버 시작 - 기존 데이터 유지 모드");
+
+// --- API 엔드포인트: 데이터 초기화 ---
+app.delete("/api/reset-data", async (req, res) => {
+  try {
+    let deletedFiles = 0;
+    let deletedImages = 0;
+
+    // data.json 파일 삭제
+    if (fs.existsSync(OUTPUT_JSON_PATH)) {
+      fs.unlinkSync(OUTPUT_JSON_PATH);
+      deletedFiles = 1;
+      console.log("데이터 파일 삭제됨: data.json");
+    }
+
+    // uploads 폴더의 이미지들 삭제
+    if (fs.existsSync(UPLOADS_DIR)) {
+      const files = fs.readdirSync(UPLOADS_DIR);
+      files.forEach((file) => {
+        fs.unlinkSync(path.join(UPLOADS_DIR, file));
+      });
+      deletedImages = files.length;
+      if (files.length > 0) {
+        console.log(`이미지 파일 ${files.length}개 삭제됨`);
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "데이터 초기화 완료",
+      deletedFiles,
+      deletedImages,
+    });
+
+    console.log("🔄 데이터 초기화 완료 (웹에서 요청)");
+  } catch (error) {
+    console.error("데이터 초기화 중 오류:", error.message);
+    res.status(500).json({
+      success: false,
+      message: `초기화 중 오류 발생: ${error.message}`,
+    });
+  }
+});
+
 // --- API 엔드포인트: 외부에서 JSON을 받아 처리 ---
 app.post("/api/receive-json", async (req, res) => {
-  // console.log("외부로부터 JSON 데이터 수신:", req.body);
+  console.log("외부로부터 데이터 수신:", req.body);
 
   let receivedData = req.body; // 외부에서 받은 JSON 데이터
 
   try {
-    const { imageData, imageFileName, imageDescription } = receivedData;
+    const { category, address, name, telno, pic } = receivedData;
 
-    if (!imageData || !imageFileName) {
+    if (!category || !address || !name || !telno || !pic) {
       throw new Error(
-        "이미지 데이터(imageData)와 파일 이름(imageFileName)이 필요합니다."
+        "모든 필드가 필요합니다: category, address, name, telno, pic"
       );
     }
 
-    // Base64 데이터에서 'data:image/jpeg;base64,' 부분 제거
-    const base64Image = imageData.split(";base64,").pop();
-    const imageBuffer = Buffer.from(base64Image, "base64");
+    // 현재 시간 추가
+    const timestamp = new Date().toISOString();
 
-    const imagePathInUploads = path.join(UPLOADS_DIR, imageFileName);
-    fs.writeFileSync(imagePathInUploads, imageBuffer);
-    console.log(
-      `'${imageFileName}' 이미지를 '${imagePathInUploads}'에 저장했습니다.`
-    );
+    // pic을 이미지 파일로 저장
+    let imageUrl = null;
+    if (pic.startsWith("data:image/")) {
+      // Base64 데이터에서 'data:image/jpeg;base64,' 부분 제거
+      const base64Image = pic.split(";base64,").pop();
+      const imageBuffer = Buffer.from(base64Image, "base64");
 
-    // 최종 JSON에 이미지 정보 추가 (public 경로 기준)
-    receivedData.imageUrl = `/uploads/${imageFileName}`;
-    receivedData.imageDescription =
-      imageDescription || `${path.parse(imageFileName).name} 이미지`;
+      const imageFileName = `${name}_${Date.now()}.jpg`;
+      const imagePathInUploads = path.join(UPLOADS_DIR, imageFileName);
+      fs.writeFileSync(imagePathInUploads, imageBuffer);
+      imageUrl = `/uploads/${imageFileName}`;
 
-    // 4. 최종 결과물을 public/data.json 파일로 저장
+      console.log(`이미지 저장: ${imageFileName}`);
+    }
+
+    // 새로운 데이터 객체 생성
+    const newRecord = {
+      id: Date.now(),
+      category,
+      address,
+      name,
+      telno,
+      pic: imageUrl || pic,
+      timestamp,
+    };
+
+    // 기존 데이터 읽기 (없으면 빈 배열)
+    let allData = [];
+    if (fs.existsSync(OUTPUT_JSON_PATH)) {
+      const existingData = fs.readFileSync(OUTPUT_JSON_PATH, "utf8");
+      const parsed = JSON.parse(existingData);
+      allData = Array.isArray(parsed) ? parsed : parsed.records || [];
+    }
+
+    // 새로운 레코드 추가
+    allData.push(newRecord);
+
+    // 전체 데이터를 JSON 파일로 저장
+    const finalData = {
+      totalCount: allData.length,
+      lastUpdated: timestamp,
+      records: allData,
+    };
+
     fs.writeFileSync(
       OUTPUT_JSON_PATH,
-      JSON.stringify(receivedData, null, 2),
+      JSON.stringify(finalData, null, 2),
       "utf8"
     );
-    console.log(
-      `성공! 이미지 데이터가 포함된 최종 JSON 파일을 생성했습니다: ${OUTPUT_JSON_PATH}`
-    );
+
+    console.log(`데이터 추가 완료! 총 ${allData.length}개 레코드`);
 
     res.status(200).json({
       success: true,
-      message: `이미지 '${imageFileName}' 처리 완료`,
-      imageUrl: receivedData.imageUrl,
+      message: `데이터 '${name}' 추가 완료`,
+      recordId: newRecord.id,
+      totalCount: allData.length,
+      imageUrl: imageUrl,
     });
   } catch (error) {
     console.error("데이터 처리 중 오류 발생:", error.message);

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>데이터 테이블 뷰어</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .info {
+        background-color: #e3f2fd;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2196f3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #495057;
+      }
+      tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+      tr:hover {
+        background-color: #e8f4fd;
+      }
+      .pic-cell img {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .pic-cell img:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s;
+      }
+      .refresh-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+      }
+      .refresh-btn:hover {
+        background-color: #0056b3;
+      }
+      .reset-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .reset-btn:hover {
+        background-color: #c82333;
+      }
+      .button-group {
+        margin-bottom: 20px;
+      }
+      .no-data {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 40px;
+      }
+      .timestamp {
+        font-size: 0.9em;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>데이터베이스 테이블 뷰어</h1>
+
+      <div class="info">
+        <strong>총 레코드 수:</strong> <span id="totalCount">0</span><br />
+        <strong>마지막 업데이트:</strong> <span id="lastUpdated">-</span>
+      </div>
+
+      <div class="button-group">
+        <button class="refresh-btn" onclick="loadData()">새로고침</button>
+        <button class="reset-btn" onclick="resetData()">데이터 초기화</button>
+      </div>
+
+      <div id="tableContainer">
+        <div class="no-data">데이터를 불러오는 중...</div>
+      </div>
+    </div>
+
+    <script>
+      async function loadData() {
+        try {
+          const response = await fetch("/data.json");
+
+          // data.json 파일이 존재하지 않는 경우 처리
+          if (!response.ok) {
+            // 파일이 없을 때 기본값으로 설정
+            document.getElementById("totalCount").textContent = "0";
+            document.getElementById("lastUpdated").textContent = "-";
+            document.getElementById("tableContainer").innerHTML =
+              '<div class="no-data">저장된 데이터가 없습니다.</div>';
+            return;
+          }
+
+          const data = await response.json();
+
+          // 정보 업데이트
+          document.getElementById("totalCount").textContent =
+            data.totalCount || 0;
+          document.getElementById("lastUpdated").textContent = data.lastUpdated
+            ? new Date(data.lastUpdated).toLocaleString("ko-KR")
+            : "-";
+
+          // 테이블 생성
+          const tableContainer = document.getElementById("tableContainer");
+
+          if (!data.records || data.records.length === 0) {
+            tableContainer.innerHTML =
+              '<div class="no-data">저장된 데이터가 없습니다.</div>';
+            return;
+          }
+
+          let tableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>카테고리</th>
+                                <th>주소</th>
+                                <th>이름</th>
+                                <th>전화번호</th>
+                                <th>사진</th>
+                                <th>등록시간</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+          // 최신순으로 정렬 (가장 최근 데이터가 위로)
+          const sortedRecords = data.records.sort((a, b) => b.id - a.id);
+
+          sortedRecords.forEach((record) => {
+            tableHTML += `
+                        <tr>
+                            <td>${record.id}</td>
+                            <td>${record.category}</td>
+                            <td>${record.address}</td>
+                            <td><strong>${record.name}</strong></td>
+                            <td>${record.telno}</td>
+                            <td class="pic-cell">
+                                ${
+                                  record.pic
+                                    ? `<img src="${record.pic}" alt="${record.name}" onclick="openImage('${record.pic}')">`
+                                    : "이미지 없음"
+                                }
+                            </td>
+                            <td class="timestamp">${new Date(
+                              record.timestamp
+                            ).toLocaleString("ko-KR")}</td>
+                        </tr>
+                    `;
+          });
+
+          tableHTML += "</tbody></table>";
+          tableContainer.innerHTML = tableHTML;
+        } catch (error) {
+          console.error("데이터 로드 실패:", error);
+          // 에러 발생 시에도 총 레코드 수를 0으로 설정
+          document.getElementById("totalCount").textContent = "0";
+          document.getElementById("lastUpdated").textContent = "-";
+          document.getElementById("tableContainer").innerHTML =
+            '<div class="no-data">데이터를 불러올 수 없습니다.</div>';
+        }
+      }
+
+      function openImage(src) {
+        window.open(src, "_blank");
+      }
+
+      async function resetData() {
+        if (!confirm("모든 데이터가 삭제됩니다. 정말 초기화하시겠습니까?")) {
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/reset-data", {
+            method: "DELETE",
+          });
+
+          if (response.ok) {
+            alert("데이터가 성공적으로 초기화되었습니다.");
+            loadData(); // 테이블 새로고침
+          } else {
+            throw new Error("데이터 초기화에 실패했습니다.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("데이터 초기화 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 페이지 로드 시 데이터 불러오기
+      document.addEventListener("DOMContentLoaded", loadData);
+
+      // 5초마다 자동 새로고침
+      setInterval(loadData, 1500);
+    </script>
+  </body>
+</html>
