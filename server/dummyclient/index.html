@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dummy Client (Node.js)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 5px; /* Add some margin between buttons */
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #statusMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dummy Client (Node.js)</h1>
+        <p>버튼을 눌러 Node.js 서버를 통해 이미지를 Real Server로 전송합니다.</p>
+        <button id="sendSimyoungBtn">심영 이미지 전송</button>
+        <button id="sendYoonBtn">윤 이미지 전송</button>
+        <div id="statusMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendSimyoungBtn = document.getElementById('sendSimyoungBtn');
+            const sendYoonBtn = document.getElementById('sendYoonBtn');
+            const statusMessage = document.getElementById('statusMessage');
+
+            async function sendImage(imageName) {
+                statusMessage.textContent = '전송 중...';
+                try {
+                    const response = await fetch(`/send-image-to-realserver?imageName=${imageName}`);
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        statusMessage.textContent = '전송 성공: ' + result.message;
+                        statusMessage.style.color = 'green';
+                    } else {
+                        statusMessage.textContent = '전송 실패: ' + result.message;
+                        statusMessage.style.color = 'red';
+                    }
+                } catch (error) {
+                    statusMessage.textContent = '오류 발생: ' + error.message;
+                    statusMessage.style.color = 'red';
+                    console.error('Error sending image:', error);
+                }
+            }
+
+            sendSimyoungBtn.addEventListener('click', () => sendImage('simyoung.jpg'));
+            sendYoonBtn.addEventListener('click', () => sendImage('yoon.jpg'));
+        });
+    </script>
+</body>
+</html>
