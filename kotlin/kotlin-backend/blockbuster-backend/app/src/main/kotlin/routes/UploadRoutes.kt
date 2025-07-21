@@ -1,5 +1,4 @@
 package routes
-// Ktor 기본 요소 import
 
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -7,6 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -37,7 +37,6 @@ fun Route.uploadRoutes() {
             var savedFile: File? = null
             var receivedAddress: String? = null
 
-            // multipart 파트 처리
             multipart.forEachPart { part ->
                 when (part) {
                     is PartData.FileItem -> {
@@ -49,13 +48,13 @@ fun Route.uploadRoutes() {
                                 input.copyTo(output)
                             }
                         }
-                        println("이미지 저장 완료: ${savedFile!!.absolutePath}")
+                        println("✔ 이미지 저장 완료: ${savedFile!!.absolutePath}")
                     }
 
                     is PartData.FormItem -> {
                         if (part.name == "address") {
                             receivedAddress = part.value
-                            println("주소 수신: $receivedAddress")
+                            println("✔ 주소 수신: $receivedAddress")
                         }
                     }
 
@@ -69,14 +68,11 @@ fun Route.uploadRoutes() {
                 return@post
             }
 
-            // AI 분석 호출
             val (predictedCategory, confidence) = runAiAnalysis(savedFile!!.absolutePath)
 
-            // Node.js 서버로 전송
             val result = sendToNodeServer(
                 imageFile = savedFile!!,
                 predictedCategory = predictedCategory,
-                confidence = confidence,
                 address = receivedAddress ?: "주소 없음"
             )
 
@@ -115,22 +111,23 @@ fun runAiAnalysis(imagePath: String): Pair<String, Float> {
     return Pair(category, confidence)
 }
 
-// Node.js 서버로 결과 전송
+// Node.js 서버로 전송
 suspend fun sendToNodeServer(
     imageFile: File,
     predictedCategory: String,
-    confidence: Float,
     address: String,
     nodeServerUrl: String = "http://localhost:3000/api/receive-json"
 ): Boolean {
     return try {
         val base64Image = Base64.getEncoder().encodeToString(imageFile.readBytes())
-        val encodedWithHeader = "data:image/jpeg;base64,$base64Image"
+        val imageDataUri = "data:image/jpeg;base64,$base64Image"
 
         val payload = buildJsonObject {
-            put("imageData", encodedWithHeader)
-            put("imageFileName", imageFile.name)
-            put("imageDescription", "Category: $predictedCategory / Confidence: $confidence / Address: $address")
+            put("category", predictedCategory)               // AI 분석 결과
+            put("address", address)                          // 프론트에서 전달받은 주소
+            put("name", "심여엉")                             // 고정값 (추후 로그인 정보로 대체 가능)
+            put("telno", "010-4444-4444")                    // 고정값
+            put("pic", imageDataUri)                         // 인코딩된 이미지
         }
 
         val client = HttpClient(CIO) {
@@ -143,12 +140,14 @@ suspend fun sendToNodeServer(
             contentType(ContentType.Application.Json)
             setBody(payload)
         }
-
-        println("Node.js 응답: ${response.status}")
+       
+        println("Node.js 응다아압: ${response.status}")
+        
         response.status == HttpStatusCode.OK
+        
 
     } catch (e: Exception) {
-        println("Node.js 실패: ${e.message}")
+        println("Node.js 전송 실패: ${e.message}")
         false
     }
 }
