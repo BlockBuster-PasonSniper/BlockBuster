@@ -17,6 +17,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
+        btnMyComplaints.setOnClickListener {
+            val intent = Intent(this, WebviewActivity::class.java)
+            intent.putExtra("url", "http://localhost:3000/api/receive-json")
+            startActivity(intent)
+        }
+
 
     }
 }
+
+
