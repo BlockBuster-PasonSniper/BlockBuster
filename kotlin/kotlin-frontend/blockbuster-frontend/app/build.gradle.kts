@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
-
+//안드로이드 sdk 버전 확인 필요
 android {
     namespace = "com.example.hackatonproject"
     compileSdk = 35
@@ -61,7 +61,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.2")
     implementation("androidx.camera:camera-view:1.3.2")
     implementation(libs.play.services.location)
-
+    //민원처리를 위한 정보를 gson 형식으로 받아옴
+    implementation ("com.google.code.gson:gson:2.11.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

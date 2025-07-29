@@ -28,6 +28,7 @@ import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -62,6 +63,7 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Hackathon Project"
 
         previewView = findViewById(R.id.previewView)
         captureButton = findViewById(R.id.captureButton)
@@ -171,16 +173,19 @@ class CameraActivity : AppCompatActivity() {
             .build()
         //SERVER URL
         val request = Request.Builder()
-            .url("http://localhost:8080") //KOTLIN LocalHost
+            .url("http://192.168.50.2:8080/upload") //KOTLIN LocalHost
             .post(requestBody)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(this@CameraActivity, "서버 전송에 실패하였습니다 : ${e.message}", Toast.LENGTH_SHORT).show()
+                    val errorMessage = "서버 전송 실패\nURL: ${request.url}\n오류: ${e.message}"  // ✅ 선언
+                    Toast.makeText(this@CameraActivity, errorMessage, Toast.LENGTH_LONG).show()
+                    Log.e("UploadError", errorMessage)  // ✅ 사용
                 }
             }
+
 
 
 //        이 부분에 분석 부분이 들어가면 될 것 같아용 밑에 onResponse는 분석 완료 후 dialog로 불러오는 부분입니다
@@ -232,15 +237,52 @@ class CameraActivity : AppCompatActivity() {
         btnPrev.setOnClickListener {
             dialog.dismiss()
         }
+
+        fun sendSignalToKtor() {
+            val client = OkHttpClient()
+
+            val json = JSONObject().apply {
+                put("signal", true)  //시그널 보내 시그널 보내
+            }
+
+            val requestBody = json.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+            val request = Request.Builder()
+                .url("http://192.168.50.2:8080/signal")  // 코틀린 서버 signal로
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("신호 전송 실패", e.message ?: "알 수 없는 오류")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        Log.d("신호 전송 성공", "✅ 단순 신호 전송 완료")
+                    } else {
+                        Log.e("신호 응답 오류", "응답 코드: ${response.code}")
+                    }
+                }
+            })
+        }
+
+
         //민원 접수 완료 -> toast로 메시지 출력
         btnSend.setOnClickListener {
+            sendSignalToKtor() //SIGNAL 보내 SIGNAL 보내 찌릿
+            //로컬에 민원 저장하기 (불편유형, 위치 , 사진)
+            val reportItem = ReportItem(discomfortType, reportLocation, photoPath)
+            ReportStorage.saveReport(this, reportItem)
+
+
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             startActivity(intent)
             finish()
             Toast.makeText(
                 this,
-                "민원이 정상적으로 접수되었습니다.\n처리된 민원은 나의 민원에서 확인할 수 있습니다.",
+                "민원이 정상적으로 접수되었습니다.\n접수된 민원은 나의 민원에서 확인할 수 있습니다.",
                 Toast.LENGTH_SHORT
             ).show()
             dialog.dismiss()
