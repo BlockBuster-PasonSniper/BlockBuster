@@ -1,5 +1,6 @@
 package com.example.hackatonproject
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -12,16 +13,17 @@ class MainActivity : AppCompatActivity() {
 
         val btnTakePhoto = findViewById<Button>(R.id.btnTakePhoto)
         val btnMyComplaints = findViewById<Button>(R.id.btnMyComplaints)
-
+        //사진촬영 버튼 이벤트
         btnTakePhoto.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
+        //나의민원 버튼 이벤트
         btnMyComplaints.setOnClickListener {
-            val intent = Intent(this, WebviewActivity::class.java)
-            intent.putExtra("url", "http://localhost:3000/api/receive-json")
+            val intent = Intent(this, MyReportsActivity::class.java)
             startActivity(intent)
         }
+
 
 
     }
