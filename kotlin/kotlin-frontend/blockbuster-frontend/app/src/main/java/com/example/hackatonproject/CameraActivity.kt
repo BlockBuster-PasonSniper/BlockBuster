@@ -34,6 +34,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.net.Uri
 
 class CameraActivity : AppCompatActivity() {
 
@@ -202,7 +203,7 @@ class CameraActivity : AppCompatActivity() {
                     val json = JSONObject(responseData ?: "{}")
                     val category = json.optString("category", "알 수 없음")
                     val confidence = json.optDouble("confidence", 0.0)
-
+                    //사진 정보!!!!
                     runOnUiThread {
                         showConfirmationDialog(photoFile.absolutePath, category, address)
                     }
@@ -271,9 +272,13 @@ class CameraActivity : AppCompatActivity() {
         //민원 접수 완료 -> toast로 메시지 출력
         btnSend.setOnClickListener {
             sendSignalToKtor() //SIGNAL 보내 SIGNAL 보내 찌릿
-            //로컬에 민원 저장하기 (불편유형, 위치 , 사진)
-            val reportItem = ReportItem(discomfortType, reportLocation, photoPath)
-            ReportStorage.saveReport(this, reportItem)
+            //로컬에 민원 저장하기 (사진, 위치 , 불편유형)
+            val reportItem = ReportItem(
+                imageUri = Uri.fromFile(File(photoPath)),
+                address = reportLocation,
+                type = discomfortType
+            )
+            ReportRepository.reportList.add(reportItem)
 
 
             val intent = Intent(this, MainActivity::class.java)
