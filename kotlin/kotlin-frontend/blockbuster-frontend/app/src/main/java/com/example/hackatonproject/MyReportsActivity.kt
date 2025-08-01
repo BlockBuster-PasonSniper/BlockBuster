@@ -1,5 +1,5 @@
 package com.example.hackatonproject
-import ReportAdapter
+import MyReportsAdapter
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -7,20 +7,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hackatonproject.R
 
+
+
+
+
+
+
 class MyReportsActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    private lateinit var myReportsAdapter: MyReportsAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_reports)
 
         // 액션바에 뒤로가기 버튼 추가
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "홈으로"
+        supportActionBar?.title = "나의 민원"
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewReports)
-        val reports = ReportStorage.getReports(this)
-
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ReportAdapter(reports)
+
+        myReportsAdapter = MyReportsAdapter(ReportRepository.reportList)
+        recyclerView.adapter = myReportsAdapter
     }
 
 
