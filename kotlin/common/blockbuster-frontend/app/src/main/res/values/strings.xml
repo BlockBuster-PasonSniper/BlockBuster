@@ -1,0 +1,7 @@
+<resources>
+    <string name="back_button_text">←</string>
+    <string name="capture_button_text">촬영</string>
+    <string name="app_name">HackatonProject</string>
+    <string name="category_label">카테고리</string>
+    <string name="address_label">주소</string>
+</resources>
