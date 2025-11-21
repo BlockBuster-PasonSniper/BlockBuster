@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.HackatonProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar"/>
-
+    <style name="Theme.CapstonDesign.Project"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>
