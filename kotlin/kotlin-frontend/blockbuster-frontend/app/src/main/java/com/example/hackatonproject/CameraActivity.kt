@@ -6,56 +6,49 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.hackatonproject.backend.app.runAiAnalysis
-import com.example.hackatonproject.backend.upload.sendToNodeServer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.net.Uri
 
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var previewView: PreviewView
-    private lateinit var captureButton: ImageButton
+    private lateinit var captureButton: Button
     private var imageCapture: ImageCapture? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    // 🔦 플래시 / 카메라 객체
-    private var camera: Camera? = null
-    private var isFlashOn = false
-
+    //카메라 + 위치 권한을 배열로 한번에 받는 최적화 진행
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-
+    //권한 실행되고 없으면 toast로 권한요청 메시지 보내기
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -65,44 +58,24 @@ class CameraActivity : AppCompatActivity() {
             Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
     }
-
+    //카메라
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Hackathon Project"
 
         previewView = findViewById(R.id.previewView)
         captureButton = findViewById(R.id.captureButton)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // X 버튼
-        val btnClose = findViewById<ImageButton>(R.id.btnClose)
-        btnClose.setOnClickListener { finish() }
-
-        // 🔦 플래시 버튼
-        val btnFlash = findViewById<ImageButton>(R.id.btnFlash)
-        btnFlash.setOnClickListener {
-            val cam = camera ?: return@setOnClickListener
-
-            isFlashOn = !isFlashOn
-            cam.cameraControl.enableTorch(isFlashOn)
-
-            // 아이콘 바꾸고 싶으면 이렇게
-            // btnFlash.setImageResource(if (isFlashOn) R.drawable.design_camera_flash_on
-            //                            else R.drawable.design_camera_flash)
-        }
-
         previewView.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         previewView.scaleType = PreviewView.ScaleType.FILL_CENTER
 
         captureButton.setOnClickListener { takePhoto() }
-
-        if (permissions.all {
-                ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
-            }
-        ) {
+        //permissions.all로 완료되면 카메라 시작
+        if (permissions.all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(permissions)
@@ -115,11 +88,10 @@ class CameraActivity : AppCompatActivity() {
                 finish()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
-
+    //카메라 실행 중 촬영 전 실행여부 확인
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
@@ -134,10 +106,7 @@ class CameraActivity : AppCompatActivity() {
 
             try {
                 cameraProvider.unbindAll()
-                // 🔹 bindToLifecycle 결과를 camera에 저장 (플래시 토글용)
-                camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (exc: Exception) {
                 Toast.makeText(this, "카메라 실행 실패", Toast.LENGTH_SHORT).show()
             }
@@ -146,13 +115,10 @@ class CameraActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
-
+    //KOTLIN BACKEND에 File 형태로 전송
         val photoFile = File(
             externalMediaDirs.first(),
-            SimpleDateFormat(
-                "yyyyMMdd-HHmmss",
-                Locale.KOREA
-            ).format(System.currentTimeMillis()) + ".jpg"
+            SimpleDateFormat("yyyyMMdd-HHmmss", Locale.KOREA).format(System.currentTimeMillis()) + ".jpg"
         )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -162,65 +128,33 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(
-                        this@CameraActivity,
-                        "사진 저장 실패: ${exc.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@CameraActivity, "사진 저장 실패: ${exc.message}", Toast.LENGTH_SHORT).show()
                 }
 
-                @RequiresPermission(
-                    allOf = [Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION]
-                )
+                @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     getLocationAndSend(photoFile)
                 }
             }
         )
     }
-
-    @RequiresPermission(
-        allOf = [Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION]
-    )
+    //실시간 위치 현황 전송
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun getLocationAndSend(photoFile: File) {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-
             if (location != null) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        Log.d(
-                            "CameraActivity",
-                            "위치 좌표: lat=${location.latitude}, lon=${location.longitude}"
-                        )
-
                         val geocoder = Geocoder(this@CameraActivity, Locale.KOREA)
-                        val addressList =
-                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        val addressList = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "주소 없음"
 
-                        val aiResult =
-                            runAiAnalysis(this@CameraActivity, photoFile.absolutePath)
-                        val discomfortType = aiResult.category
-                        val confidence = aiResult.confidence
-                        Log.d("CameraActivity", "AI 결과: $discomfortType ($confidence)")
-
                         withContext(Dispatchers.Main) {
-                            showConfirmationDialog(
-                                photoFile.absolutePath,
-                                discomfortType,
-                                address
-                            )
+                            sendMultipartToServer(photoFile, address)
                         }
                     } catch (e: Exception) {
-                        Log.e("CameraActivity", "주소 변환 실패", e)
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@CameraActivity,
-                                "주소 변환 실패",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@CameraActivity, "주소 변환 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -229,13 +163,60 @@ class CameraActivity : AppCompatActivity() {
             }
         }
     }
+    //KOTLIN BACKEND 8080으로 보내기 -> Multipart 형식
+    private fun sendMultipartToServer(photoFile: File, address: String) {
+        val client = OkHttpClient()
+        //File과 Address
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", photoFile.name, photoFile.asRequestBody("image/jpeg".toMediaTypeOrNull()))
+            .addFormDataPart("address", address)
+            .build()
+        //SERVER URL
+        val request = Request.Builder()
+            .url("http://192.168.50.2:8080/upload") //KOTLIN LocalHost
+            .post(requestBody)
+            .build()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showConfirmationDialog(
-        photoPath: String,
-        discomfortType: String,
-        reportLocation: String
-    ) {
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    val errorMessage = "서버 전송 실패\nURL: ${request.url}\n오류: ${e.message}"  // ✅ 선언
+                    Toast.makeText(this@CameraActivity, errorMessage, Toast.LENGTH_LONG).show()
+                    Log.e("UploadError", errorMessage)  // ✅ 사용
+                }
+            }
+
+
+
+//        이 부분에 분석 부분이 들어가면 될 것 같아용 밑에 onResponse는 분석 완료 후 dialog로 불러오는 부분입니다
+
+
+
+
+
+
+            //JSON 형식으로 불러오기 -> AI 분석 완료 되었을 당시
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val responseData = response.body?.string()
+                    val json = JSONObject(responseData ?: "{}")
+                    val category = json.optString("category", "알 수 없음")
+                    val confidence = json.optDouble("confidence", 0.0)
+                    //사진 정보!!!!
+                    runOnUiThread {
+                        showConfirmationDialog(photoFile.absolutePath, category, address)
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(this@CameraActivity, "AI 분석 실패 😢", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+    }
+    //분석 완료된 JSON 형식 파일을 TEXT로 뽑아 dialog에서 보여주기
+    private fun showConfirmationDialog(photoPath: String, discomfortType: String, reportLocation: String) {
         val dialogView = layoutInflater.inflate(R.layout.activity_dialog_confirm, null)
 
         val tvDiscomfortType = dialogView.findViewById<TextView>(R.id.tvDiscomfortType)
@@ -243,7 +224,6 @@ class CameraActivity : AppCompatActivity() {
         val ivAttachedImage = dialogView.findViewById<ImageView>(R.id.ivAttachedImage)
         val btnPrev = dialogView.findViewById<Button>(R.id.btnPrev)
         val btnSend = dialogView.findViewById<Button>(R.id.btnSend)
-        val dialogLoading = dialogView.findViewById<View>(R.id.dialogLoading)
 
         tvDiscomfortType.text = "불편유형: $discomfortType"
         tvReportLocation.text = "신고위치: $reportLocation"
@@ -255,99 +235,66 @@ class CameraActivity : AppCompatActivity() {
             .setView(dialogView)
             .create()
 
-        dialog.window?.setBackgroundDrawable(
-            android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)
-        )
-        dialog.show()
-
         btnPrev.setOnClickListener {
             dialog.dismiss()
         }
 
-        btnSend.setOnClickListener {
-            Log.d("CameraActivity", "🟢 전송 버튼 클릭됨")
+        fun sendSignalToKtor() {
+            val client = OkHttpClient()
 
-            // 다이얼로그 내부 로딩 시작 + 버튼 잠금 (중복 클릭 방지)
-            dialogLoading.visibility = View.VISIBLE
-            btnSend.isEnabled = false
-            btnPrev.isEnabled = false
+            val json = JSONObject().apply {
+                put("signal", true)  //시그널 보내 시그널 보내
+            }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val imageFile = File(photoPath)
+            val requestBody = json.toString().toRequestBody("application/json".toMediaTypeOrNull())
 
-                    Log.d(
-                        "CameraActivity",
-                        "📤 전송 준비: file=${imageFile.absolutePath}, category=$discomfortType, address=$reportLocation"
-                    )
+            val request = Request.Builder()
+                .url("http://192.168.50.2:8080/signal")  // 코틀린 서버 signal로
+                .post(requestBody)
+                .build()
 
-                    val result = sendToNodeServer(
-                        imageFile = imageFile,
-                        predictedCategory = discomfortType,
-                        address = reportLocation
-                    )
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("신호 전송 실패", e.message ?: "알 수 없는 오류")
+                }
 
-                    withContext(Dispatchers.Main) {
-                        // 로딩 종료 + 버튼 복구
-                        dialogLoading.visibility = View.GONE
-                        btnSend.isEnabled = true
-                        btnPrev.isEnabled = true
-
-                        if (result) {
-                            Log.d("CameraActivity", "✅ 민원 전송 성공")
-
-                            val imageUri = Uri.fromFile(imageFile)
-                            val reportItem =
-                                ReportItem(imageUri, reportLocation, discomfortType)
-                            ReportRepository.reportList.add(reportItem)
-
-                            val intent =
-                                Intent(this@CameraActivity, MainActivity::class.java)
-                            intent.addFlags(
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-                            )
-                            startActivity(intent)
-                            finish()
-
-                            Toast.makeText(
-                                this@CameraActivity,
-                                "민원이 정상적으로 접수되었습니다.\n접수된 민원은 나의 민원에서 확인할 수 있습니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Log.w(
-                                "CameraActivity",
-                                "❌ 민원 전송 실패: 서버에서 false 반환"
-                            )
-
-                            Toast.makeText(
-                                this@CameraActivity,
-                                "민원 전송에 실패했습니다. 인터넷 연결을 확인해주세요.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        dialog.dismiss()
-                    }
-                } catch (e: Exception) {
-                    Log.e("CameraActivity", "🔥 전송 중 예외 발생", e)
-
-                    withContext(Dispatchers.Main) {
-                        // 로딩 종료 + 버튼 복구
-                        dialogLoading.visibility = View.GONE
-                        btnSend.isEnabled = true
-                        btnPrev.isEnabled = true
-
-                        Toast.makeText(
-                            this@CameraActivity,
-                            "민원 전송 중 오류가 발생했습니다: ${e.localizedMessage}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        dialog.dismiss()
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        Log.d("신호 전송 성공", "✅ 단순 신호 전송 완료")
+                    } else {
+                        Log.e("신호 응답 오류", "응답 코드: ${response.code}")
                     }
                 }
-            }
+            })
         }
+
+
+        //민원 접수 완료 -> toast로 메시지 출력
+        btnSend.setOnClickListener {
+            sendSignalToKtor() //SIGNAL 보내 SIGNAL 보내 찌릿
+            //로컬에 민원 저장하기 (사진, 위치 , 불편유형)
+            val reportItem = ReportItem(
+                imageUri = Uri.fromFile(File(photoPath)),
+                address = reportLocation,
+                type = discomfortType
+            )
+            ReportRepository.reportList.add(reportItem)
+
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            startActivity(intent)
+            finish()
+            Toast.makeText(
+                this,
+                "민원이 정상적으로 접수되었습니다.\n접수된 민원은 나의 민원에서 확인할 수 있습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
+
+
 }

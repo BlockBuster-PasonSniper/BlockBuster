@@ -22,7 +22,7 @@ class MyReportsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_reports)
 
         // 액션바에 뒤로가기 버튼 추가
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "나의 민원"
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)

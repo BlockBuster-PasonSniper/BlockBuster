@@ -1,8 +1,5 @@
 <resources>
     <string name="back_button_text">←</string>
-    <string name="camera_close">카메라 닫기</string>
-    <string name="camera_flash_toggle">플래시 전환</string>
-    <string name="camera_take_picture">사진 촬영</string>
     <string name="capture_button_text">촬영</string>
     <string name="app_name">HackatonProject</string>
     <string name="category_label">카테고리</string>

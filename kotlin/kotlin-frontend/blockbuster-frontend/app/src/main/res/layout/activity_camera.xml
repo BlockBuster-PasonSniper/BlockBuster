@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 카메라 미리보기 -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="match_parent"
@@ -11,49 +10,15 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"/>
 
-    <!-- 상단 바 (닫기 / 플래시 / 카메라 전환) -->
-
-    <ImageButton
-        android:id="@+id/btnClose"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|start"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/design_camera_x"
-        android:contentDescription="@string/camera_close" />
-
-    <ImageButton
-        android:id="@+id/btnFlash"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        android:scaleType="center"
-        android:src="@drawable/design_camera_flash"
-        android:contentDescription="@string/camera_flash_toggle"/>
-
-    <!-- ===== 가운데 프레임 (인식 영역 표시) ===== -->
-
-    <FrameLayout
-        android:id="@+id/scanFrame"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_gravity="center"
-        android:background="@drawable/design_camera_capture" />
-
-    <!-- 동그란 촬영 버튼 -->
-    <ImageButton
+    <Button
         android:id="@+id/captureButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="촬영"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/design_camera_button"
-        android:contentDescription="@string/camera_take_picture"/>
+        android:layout_marginBottom="30dp"
+        android:elevation="20dp"/>
 
 </FrameLayout>
