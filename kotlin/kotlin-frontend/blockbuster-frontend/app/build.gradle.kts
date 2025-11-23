@@ -87,4 +87,8 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.17.0")
 
     implementation("io.ktor:ktor-client-okhttp:2.3.4")
+
+    //사진 회전시키기 위한 Coil 설치
+    implementation("io.coil-kt:coil:2.6.0")
+
 }

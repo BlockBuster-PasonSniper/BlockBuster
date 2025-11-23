@@ -3,7 +3,6 @@ package com.example.hackatonproject
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
@@ -30,6 +29,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import coil.load
 import com.example.hackatonproject.backend.app.runAiAnalysis
 import com.example.hackatonproject.backend.upload.sendToNodeServer
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -244,8 +244,10 @@ class CameraActivity : AppCompatActivity() {
         tvDiscomfortType.text = "불편유형: $discomfortType"
         tvReportLocation.text = "신고위치: $reportLocation"
 
-        val bitmap = BitmapFactory.decodeFile(photoPath)
-        ivAttachedImage.setImageBitmap(bitmap)
+
+        //사진 촬영 이후 가로로 dialog 나오는 문제 -> bitmap 방식이 아닌 Coil 도입
+        ivAttachedImage.load(File(photoPath))
+
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)

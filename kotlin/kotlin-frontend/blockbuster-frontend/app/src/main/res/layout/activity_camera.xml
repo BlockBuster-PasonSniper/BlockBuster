@@ -44,7 +44,7 @@
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_gravity="center"
-        android:background="@drawable/design_camera_capture" />
+        android:background="@drawable/design_camera_capture_sec" />
 
     <!-- 동그란 촬영 버튼 -->
     <ImageButton
