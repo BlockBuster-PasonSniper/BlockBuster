@@ -25,6 +25,7 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
     )
 
     val CONFIDENCE_THRESHOLD = 0.7f
+    val EXCLUDE_D20_THRESHOLD = 0.75f
 
     // 1) 모델 로드
     val assetManager = context.assets
@@ -77,12 +78,9 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
         true
     )
 
-    // === 여기서부터 전처리 방식이 핵심 ===
     val inputBuffer = if (inputType == DataType.FLOAT32) {
-        // 학습이 float 모델 기준이면 이쪽이 맞음
         convertBitmapToFloatBuffer(resizedBitmap, inputWidth, inputHeight, inputChannels)
     } else {
-        // 만약 tflite가 UINT8/INT8 양자화라면, 실제론 이쪽으로 맞춰줘야 함
         convertBitmapToQuantizedBuffer(
             resizedBitmap,
             inputWidth,
@@ -94,8 +92,8 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
     }
 
     // 입력 샘플 몇 개만 찍어보기 (값이 다 0.0 비슷하면 전처리 문제)
-    val sample = FloatArray(20)
     if (inputType == DataType.FLOAT32) {
+        val sample = FloatArray(20)
         val dup = inputBuffer.duplicate()
         dup.order(ByteOrder.nativeOrder())
         dup.rewind()
@@ -118,7 +116,36 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
         Log.d("AI_DEBUG", "score[$index] ($name) = $score")
     }
 
-    val predIndex = scores.indices.maxByOrNull { scores[it] } ?: -1
+    // === 4) D20 제외 조건 로직 ===
+    val indexD20 = classNames.indexOf("D20")
+
+    // D20을 제외한 후보 클래스들
+    val nonD20Indices = scores.indices.filter { it != indexD20 }
+
+    // 조건에 쓸 클래스들: D00, D10, D30, D40, D50, D60, D70, D80, D90
+    val strongClasses = setOf("D00", "D10", "D30", "D40", "D50", "D60", "D70", "D80", "D90")
+    val strongIndices = strongClasses.mapNotNull { className ->
+        classNames.indexOf(className).takeIf { it >= 0 }
+    }
+
+    // strong 클래스들 중 하나라도 EXCLUDE_D20_THRESHOLD 이상이면 → D20은 무조건 배제
+    val hasStrongHighConfidence = strongIndices.any { idx ->
+        scores[idx] >= EXCLUDE_D20_THRESHOLD
+    }
+
+    val predIndex = if (hasStrongHighConfidence) {
+        // 👉 규칙 발동: D20은 빼고 나머지 중에서 가장 높은 score 선택
+        val idx = nonD20Indices.maxByOrNull { scores[it] } ?: -1
+        Log.w(
+            "AI_DEBUG",
+            "D20_EXCLUDED_RULE_TRIGGERED: strong class >= $EXCLUDE_D20_THRESHOLD, " +
+                    "selected=${classNames.getOrElse(idx) { "UNK" }} score=${scores.getOrNull(idx)}"
+        )
+        idx
+    } else {
+        // 평소처럼 전체에서 가장 높은 score 선택
+        scores.indices.maxByOrNull { scores[it] } ?: -1
+    }
 
     if (predIndex == -1) {
         Log.e("AI_DEBUG", "모델 예측 인덱스 계산 실패 (predIndex = -1)")
@@ -142,6 +169,16 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
         )
     }
 
+    //D00 종방향균열
+    //D10 횡방향균열
+    //D20 악어등균열
+    //D30 보수된균열
+    //D40 포트홀
+    //D50 횡단보도 흐림
+    //D60 차선마모
+    //D70 맨홀뚜껑
+    //D80 패치된 도로구역
+    //D90 러팅 바퀴 자국에 의한 요철
     val category = when (detailCodeRaw) {
         "D00", "D10", "D20" -> "도로 균열"
         "D40"               -> "포트홀"
@@ -178,7 +215,6 @@ private fun convertBitmapToFloatBuffer(
     bitmap.getPixels(intValues, 0, width, 0, 0, width, height)
 
     for (pixel in intValues) {
-        // 🔹 정규화 제거: 0~255 그대로 float로 넣어줌
         val r = ((pixel shr 16) and 0xFF).toFloat()
         val g = ((pixel shr 8) and 0xFF).toFloat()
         val b = (pixel and 0xFF).toFloat()
@@ -192,7 +228,6 @@ private fun convertBitmapToFloatBuffer(
     return buffer
 }
 
-
 private fun convertBitmapToQuantizedBuffer(
     bitmap: Bitmap,
     width: Int,
@@ -201,7 +236,6 @@ private fun convertBitmapToQuantizedBuffer(
     scale: Float,
     zeroPoint: Int
 ): ByteBuffer {
-    // UINT8 / INT8용 예시. 지금은 주로 UINT8 가정.
     val buffer = ByteBuffer.allocateDirect(width * height * channels)
     buffer.order(ByteOrder.nativeOrder())
 
@@ -213,8 +247,6 @@ private fun convertBitmapToQuantizedBuffer(
         val g = ((pixel shr 8) and 0xFF)
         val b = (pixel and 0xFF)
 
-        // 가장 단순한: 0~255 그대로 넣기
-        // 필요하면 scale/zeroPoint 반영해서 다시 조정 가능
         buffer.put(r.toByte())
         buffer.put(g.toByte())
         buffer.put(b.toByte())
