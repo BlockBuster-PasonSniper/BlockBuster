@@ -8,6 +8,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Telephony
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +30,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import coil.load
 import com.example.hackatonproject.backend.app.runAiAnalysis
 import com.example.hackatonproject.backend.upload.sendToNodeServer
@@ -196,19 +198,37 @@ class CameraActivity : AppCompatActivity() {
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "주소 없음"
 
+                        // 🔹 AI 분석 호출
                         val aiResult =
                             runAiAnalysis(this@CameraActivity, photoFile.absolutePath)
-                        val discomfortType = aiResult.category
+                        val discomfortType = aiResult.category      // 상위 카테고리 (한글, "기타" 포함)
+                        val detailCode = aiResult.detailCode        // D00~D90 또는 ETC
                         val confidence = aiResult.confidence
-                        Log.d("CameraActivity", "AI 결과: $discomfortType ($confidence)")
+
+                        Log.d(
+                            "CameraActivity",
+                            "AI 결과: code=$detailCode, category=$discomfortType, confidence=$confidence"
+                        )
+                        Log.d("CameraActivity", "주소 결과: $address")
 
                         withContext(Dispatchers.Main) {
+                            // 🔸 기타인 경우: 다이얼로그는 그대로 띄우되 토스트로만 경고
+                            if (discomfortType == "기타") {
+                                Toast.makeText(
+                                    this@CameraActivity,
+                                    "AI가 사진을 정확히 인식하지 못했습니다.\n불편유형이 '기타'로 설정됩니다.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            // 🔸 불편유형이 무엇이든 항상 확인 다이얼로그로 진행
                             showConfirmationDialog(
                                 photoFile.absolutePath,
                                 discomfortType,
                                 address
                             )
                         }
+
                     } catch (e: Exception) {
                         Log.e("CameraActivity", "주소 변환 실패", e)
                         withContext(Dispatchers.Main) {
@@ -221,7 +241,7 @@ class CameraActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "위치를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -244,10 +264,8 @@ class CameraActivity : AppCompatActivity() {
         tvDiscomfortType.text = "불편유형: $discomfortType"
         tvReportLocation.text = "신고위치: $reportLocation"
 
-
-        //사진 촬영 이후 가로로 dialog 나오는 문제 -> bitmap 방식이 아닌 Coil 도입
+        // 사진 촬영 이후 가로로 dialog 나오는 문제 -> bitmap 방식이 아닌 Coil 도입
         ivAttachedImage.load(File(photoPath))
-
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -299,12 +317,13 @@ class CameraActivity : AppCompatActivity() {
                                 ReportItem(imageUri, reportLocation, discomfortType)
                             ReportRepository.reportList.add(reportItem)
 
-                            // ★ 서버 전송 성공 후 문자앱 열기
+                            // ★ 서버 전송 성공 후 문자앱 열기 (LMS, 사진 포함)
                             val jinjuCityHallNumber = "01012345678" // TODO: 실제 진주시청 문자 번호로 교체
-                            sendReportSms(
+                            sendReportLms(
                                 phoneNumber = jinjuCityHallNumber,
                                 address = reportLocation,
-                                category = discomfortType
+                                category = discomfortType,
+                                imageFile = imageFile
                             )
 
                             Toast.makeText(
@@ -313,7 +332,7 @@ class CameraActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // ★ CameraActivity 는 닫고, 뒤로가기로 나의 민원/메인으로 돌아가게
+                            // ★ CameraActivity 닫기
                             finish()
                         } else {
                             Log.w(
@@ -351,11 +370,12 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    // ★ 문자앱 열어서 민원 내용 자동 작성하는 함수
-    private fun sendReportSms(
+    // ★ 문자앱 열어서 민원 내용 + 사진까지 자동 작성하는 함수 (LMS/MMS)
+    private fun sendReportLms(
         phoneNumber: String,
         address: String,
-        category: String
+        category: String,
+        imageFile: File
     ) {
         val message = """
             [도로이용불편 신고]
@@ -364,13 +384,38 @@ class CameraActivity : AppCompatActivity() {
             유형: $category
         """.trimIndent()
 
-        val uri = Uri.parse("smsto:$phoneNumber") // "sms:" 말고 "smsto:"가 안전함
-        val smsIntent = Intent(Intent.ACTION_SENDTO, uri).apply {
+        // File → content:// URI 로 변환 (다른 앱에 전달용)
+        val imageUri: Uri = FileProvider.getUriForFile(
+            this,
+            "$packageName.fileprovider",   // ← 여기만 이렇게 변경
+            imageFile
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            // MMS/LMS 전송용 MIME 타입
+            type = "image/*"
+
+            // 수신 번호
+            putExtra("address", phoneNumber)
+
+            // 문자 내용
             putExtra("sms_body", message)
+
+            // 이미지 첨부
+            putExtra(Intent.EXTRA_STREAM, imageUri)
+
+            // 다른 앱(문자 앱)이 이 URI를 읽을 수 있도록 권한 부여
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        if (smsIntent.resolveActivity(packageManager) != null) {
-            startActivity(smsIntent)
+        // 기본 문자 앱으로 바로 열기 (있으면)
+        val defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this)
+        if (defaultSmsPackage != null) {
+            intent.setPackage(defaultSmsPackage)
+        }
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
         } else {
             Toast.makeText(this, "문자 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
