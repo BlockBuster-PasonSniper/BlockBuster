@@ -1,113 +1,75 @@
-// 🔁 수정 시작: 패키지 경로를 CameraActivity.kt와 일치시키기 위해 변경
+// Node.js(또는 백엔드)로 민원 정보를 보내는(척하는) 유틸 함수
+// 실제 대회/시연에서는 JSON을 로그로만 남기고 항상 true를 리턴하도록 구성
+
 package com.example.hackatonproject.backend.upload
-// 🔁 수정 끝
 
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.client.plugins.contentnegotiation.*
-import kotlinx.serialization.json.Json
-import io.ktor.serialization.kotlinx.json.*
-
-
-import io.ktor.client.engine.cio.*
-import android.os.Build
-import androidx.annotation.RequiresApi
-import kotlinx.serialization.json.*
+import android.util.Base64
+import android.util.Log
 import java.io.File
-import java.util.*
-import java.util.Base64
-import android.net.Uri
-import io.ktor.client.utils.EmptyContent.contentType
-import kotlinx.coroutines.CoroutineScope
-import okhttp3.OkHttp
+import java.util.concurrent.atomic.AtomicLong
 
-// 🔁 수정 시작: 외부 라우팅 제거 및 내부 호출 방식으로 전환
+// 간단한 인덱스 생성기 (id 1, 2, 3, ...)
+private val idGenerator = AtomicLong(1L)
 
-// AI 분석 실행 함수 (파일과 주소를 입력받아 결과 반환)
-data class AiResult(val category: String, val confidence: Float)
-
-//fun runAiAnalysis(imageFile: File, address: String): AiResult {
-//    val pythonPath = "python"
-//    val scriptPath = File("predict.py").absolutePath
-//    val outputPath = File("ai_result.json").absolutePath
-//
-//    val process = ProcessBuilder(pythonPath, scriptPath, imageFile.absolutePath)
-//        .redirectErrorStream(true)
-//        .start()
-//
-//    val stderr = process.inputStream.bufferedReader(Charsets.UTF_8).readText()
-//    if (stderr.isNotBlank()) println("[AI stderr] $stderr")
-//
-//    val json = File(outputPath).readText(Charsets.UTF_8)
-//    val parsed = Json.parseToJsonElement(json).jsonObject
-//
-//    val category = parsed["category"]?.jsonPrimitive?.content ?: "unknown"
-//    val confidence = parsed["confidence"]?.jsonPrimitive?.floatOrNull ?: 0.0f
-//
-//    println("AI 결과: $category ($confidence)")
-//    return AiResult(category, confidence)
-//}
-
-//fun runAiAnalysis(context: CoroutineScope, imageUri: Uri): Pair<String, Float> {
-//    val result = runAiAnalysis(context, imageUri)
-//    return Pair(result.category, result.confidence)
-//}
-
-
-
-
-// Node.js 서버로 전송
-@RequiresApi(Build.VERSION_CODES.O)
-suspend fun sendToNodeServer(
+/**
+ * 이미지 + AI 분류 결과 + 주소를 JSON 형태로 만들어
+ * "서버로 전송했다" 고 가정하는 함수.
+ *
+ * - 실제 HTTP 요청은 아직 넣지 않고
+ *   Logcat에 JSON만 찍은 뒤 true 반환
+ *
+ * - 나중에 진짜 서버 연동 시, 이 함수 안에서
+ *   OkHttp / Ktor Client로 POST 요청만 추가하면 됨.
+ */
+fun sendToNodeServer(
     imageFile: File,
     predictedCategory: String,
-    address: String,
-    name: String = "심여엉",
-    telno: String = "010-4444-4444",
-    nodeServerUrl: String = "http://192.168.153.145:3005/api/receive-json"
+    address: String
 ): Boolean {
     return try {
-        val base64Image = Base64.getEncoder().encodeToString(imageFile.readBytes())
-        val imageDataUri = "data:image/jpeg;base64,$base64Image"
+        // 1) 이미지 → Base64 인코딩
+        val imageBytes = imageFile.readBytes()
+        val base64Image = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
 
-        val payload = buildJsonObject {
-            put("category", predictedCategory)
-            put("address", address)
-            put("name", name)
-            put("telno", telno)
-            put("pic", imageDataUri)
-        }
+        // 2) 민원 고유 ID 생성 (0001, 0002 느낌)
+        val id = idGenerator.getAndIncrement()
 
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json()
+        // 3) JSON 문자열 하드코딩 생성
+        //    (kotlinx-serialization 안 쓰고 단순 문자열로 처리)
+        val json = """
+            {
+              "id": $id,
+              "category": "${escapeJson(predictedCategory)}",
+              "address": "${escapeJson(address)}",
+              "imageBase64": "$base64Image",
+              "createdAt": ${System.currentTimeMillis()}
             }
-        }
+        """.trimIndent()
 
-        val response = client.post(nodeServerUrl) {
-            contentType(ContentType.Application.Json)
-            setBody(payload)
-        }
-        response.status == HttpStatusCode.OK
+        // 4) 일단은 로그에만 찍고 "전송 성공"으로 처리
+        Log.d("sendToNodeServer", "전송할 민원 JSON = $json")
 
-//        println("Node.js 응다아압: ${response.status}")
-//
-//        response.status == HttpStatusCode.OK
+        // TODO: 진짜 서버 연동하고 싶으면 여기서 HTTP POST 추가
+        //  예시:
+        //  val client = OkHttpClient()
+        //  val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
+        //  val request = Request.Builder()
+        //      .url("http://YOUR_NODE_SERVER/minwon")
+        //      .post(body)
+        //      .build()
+        //  val response = client.newCall(request).execute()
+        //  return response.isSuccessful
 
-        val jsonString = Json.encodeToString(JsonObject.serializer(), payload)
-        println("전송 Payload: $jsonString")
-
-        // 이 부분은 실제 요청으로 교체 가능 (예: ktor client 등)
-        println("Node.js 서버에 JSON 전송 완료 (시뮬레이션)")
-
-        true // 성공 시
+        true  // 지금은 항상 성공했다고 가정
     } catch (e: Exception) {
-        println("Node.js 전송 실패: ${e.message}")
+        Log.e("sendToNodeServer", "Node.js 전송 중 오류", e)
         false
     }
 }
 
-// 🔁 수정 끝
+/**
+ * JSON 문자열에 들어갈 값에서 큰따옴표, 줄바꿈 등을 이스케이프
+ */
+private fun escapeJson(value: String): String =
+    value.replace("\"", "\\\"")
+        .replace("\n", "\\n")

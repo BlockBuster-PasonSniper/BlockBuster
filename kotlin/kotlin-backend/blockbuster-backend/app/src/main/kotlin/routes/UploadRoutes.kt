@@ -18,12 +18,14 @@ import kotlinx.serialization.json.*
 import java.io.File
 import java.util.*
 
+var latestUploadedFile: File? = null
+var latestAddress: String? = null
+
 fun Route.uploadRoutes() {
     post("/upload") {
         try {
             println("▶ [UPLOAD] 요청 수신됨")
 
-            // Content-Type 검사
             val contentType = call.request.contentType()
             if (!contentType.match(ContentType.MultiPart.FormData)) {
                 call.respond(HttpStatusCode.BadRequest, "Content-Type은 multipart/form-data 여야 합니다.")
@@ -44,9 +46,7 @@ fun Route.uploadRoutes() {
                         val fileName = UUID.randomUUID().toString() + ".$ext"
                         savedFile = File(uploadDir, fileName)
                         part.streamProvider().use { input ->
-                            savedFile!!.outputStream().use { output ->
-                                input.copyTo(output)
-                            }
+                            savedFile!!.outputStream().use { output -> input.copyTo(output) }
                         }
                         println("✔ 이미지 저장 완료: ${savedFile!!.absolutePath}")
                     }
@@ -64,29 +64,70 @@ fun Route.uploadRoutes() {
             }
 
             if (savedFile == null) {
-                call.respond(HttpStatusCode.BadRequest, "파일이 없습니다.")
+                call.respond(HttpStatusCode.BadRequest, "no file")
                 return@post
             }
 
+            latestUploadedFile = savedFile
+            latestAddress = receivedAddress
+
+            // ✅ AI 분석 실행
             val (predictedCategory, confidence) = runAiAnalysis(savedFile!!.absolutePath)
 
-            val result = sendToNodeServer(
-                imageFile = savedFile!!,
-                predictedCategory = predictedCategory,
-                address = receivedAddress ?: "주소 없음"
-            )
+            // ✅ 프론트에 리턴할 JSON 구성 (이미지 base64 제외)
+            val jsonResponse = buildJsonObject {
+                put("category", predictedCategory)
+                put("confidence", confidence)
+                put("address", receivedAddress ?: "주소 없음")
+                put("name", "김계계")
+                put("telno", "010-4444-4444")
+                // 이미지 base64나 pic은 아직 전송하지 않음
+            }
 
-            call.respond(
-                if (result) HttpStatusCode.OK else HttpStatusCode.InternalServerError,
-                mapOf("category" to predictedCategory, "confidence" to confidence, "status" to result)
-            )
+            println("📤 프론트로 분석 결과 전송: $jsonResponse")
+            call.respondText(
+                    jsonResponse.toString(),
+                    ContentType.Application.Json.withCharset(Charsets.UTF_8),
+                    HttpStatusCode.OK
+)
 
         } catch (e: Exception) {
-            println("처리 중 오류 발생: ${e.message}")
+            println("❌ error: ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "server error")
+        }
+    }
+     post("/signal") {
+        try {
+            println("📶 signul recive")
+
+            if (latestUploadedFile == null || latestAddress == null) {
+                call.respond(HttpStatusCode.BadRequest, "최근 업로드 파일 또는 주소가 없습니다.")
+                return@post
+            }
+
+            val (predictedCategory, confidence) = runAiAnalysis(latestUploadedFile!!.absolutePath)
+
+            val success = sendToNodeServer(
+                imageFile = latestUploadedFile!!,
+                predictedCategory = predictedCategory,
+                address = latestAddress!!
+            )
+
+            if (success) {
+                println("✅ Node.js 전송 성공")
+                call.respond(HttpStatusCode.OK, "전송 완료")
+            } else {
+                println("❌ Node.js 전송 실패")
+                call.respond(HttpStatusCode.InternalServerError, "Node.js 전송 실패")
+            }
+        } catch (e: Exception) {
+            println("❌ 시그널 처리 오류: ${e.message}")
             call.respond(HttpStatusCode.InternalServerError, "서버 오류 발생")
         }
     }
 }
+
+
 
 // AI 분석 실행 함수
 fun runAiAnalysis(imagePath: String): Pair<String, Float> {
@@ -125,7 +166,7 @@ suspend fun sendToNodeServer(
         val payload = buildJsonObject {
             put("category", predictedCategory)               // AI 분석 결과
             put("address", address)                          // 프론트에서 전달받은 주소
-            put("name", "심여엉")                             // 고정값 (추후 로그인 정보로 대체 가능)
+            put("name", "김계계")                             // 고정값 (추후 로그인 정보로 대체 가능)
             put("telno", "010-4444-4444")                    // 고정값
             put("pic", imageDataUri)                         // 인코딩된 이미지
         }

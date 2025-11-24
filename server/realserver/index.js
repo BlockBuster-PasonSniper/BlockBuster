@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import os from "os";
 
 // --- 기본 설정 ---
 const __filename = fileURLToPath(import.meta.url);
@@ -38,6 +39,23 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 
 console.log("💾 서버 시작 - 기존 데이터 유지 모드");
+
+// 현재 PC의 IP 주소 가져오기
+function getLocalIPAddress() {
+  const interfaces = os.networkInterfaces();
+  for (const interfaceName in interfaces) {
+    const addresses = interfaces[interfaceName];
+    for (const address of addresses) {
+      // IPv4이고 내부 네트워크가 아닌 주소 찾기
+      if (address.family === "IPv4" && !address.internal) {
+        return address.address;
+      }
+    }
+  }
+  return "localhost"; // IP를 찾을 수 없으면 localhost 반환
+}
+
+const localIP = getLocalIPAddress();
 
 // --- API 엔드포인트: 데이터 초기화 ---
 app.delete("/api/reset-data", async (req, res) => {
@@ -169,11 +187,10 @@ app.post("/api/receive-json", async (req, res) => {
 
 // --- 서버 실행 ---
 app.listen(port, () => {
-  console.log(`\n서버가 http://localhost:${port} 에서 실행 중입니다.`);
-  console.log(
-    `JSON을 보내려면 POST 요청을 http://localhost:${port}/api/receive-json 으로 보내세요.`
-  );
-  console.log(
-    `웹 페이지는 http://localhost:${port}/index.html 에서 확인하세요.`
-  );
+  console.log(`\n서버가 실행 중입니다:`);
+  console.log(`  - 네트워크 접속: http://${localIP}:${port}`);
+  console.log(`\nAPI 엔드포인트:`);
+  console.log(`  - POST http://${localIP}:${port}/api/receive-json`);
+  console.log(`\n웹 페이지:`);
+  console.log(`  - 모바일: http://${localIP}:${port}/table.html`);
 });

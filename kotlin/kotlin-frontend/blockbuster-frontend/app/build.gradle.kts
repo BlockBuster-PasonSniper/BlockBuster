@@ -67,7 +67,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.google.android.material:material:1.11.0")
-    implementation(libs.litert.api)
+    //implementation(libs.litert.api)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -87,4 +87,8 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.17.0")
 
     implementation("io.ktor:ktor-client-okhttp:2.3.4")
+
+    //사진 회전시키기 위한 Coil 설치
+    implementation("io.coil-kt:coil:2.6.0")
+
 }

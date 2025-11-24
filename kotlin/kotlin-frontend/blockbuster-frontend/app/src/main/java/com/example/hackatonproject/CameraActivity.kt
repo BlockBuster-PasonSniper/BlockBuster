@@ -3,7 +3,6 @@ package com.example.hackatonproject
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
@@ -30,6 +29,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import coil.load
 import com.example.hackatonproject.backend.app.runAiAnalysis
 import com.example.hackatonproject.backend.upload.sendToNodeServer
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -88,10 +88,6 @@ class CameraActivity : AppCompatActivity() {
 
             isFlashOn = !isFlashOn
             cam.cameraControl.enableTorch(isFlashOn)
-
-            // 아이콘 바꾸고 싶으면 이렇게
-            // btnFlash.setImageResource(if (isFlashOn) R.drawable.design_camera_flash_on
-            //                            else R.drawable.design_camera_flash)
         }
 
         previewView.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
@@ -248,8 +244,10 @@ class CameraActivity : AppCompatActivity() {
         tvDiscomfortType.text = "불편유형: $discomfortType"
         tvReportLocation.text = "신고위치: $reportLocation"
 
-        val bitmap = BitmapFactory.decodeFile(photoPath)
-        ivAttachedImage.setImageBitmap(bitmap)
+
+        //사진 촬영 이후 가로로 dialog 나오는 문제 -> bitmap 방식이 아닌 Coil 도입
+        ivAttachedImage.load(File(photoPath))
+
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -301,20 +299,22 @@ class CameraActivity : AppCompatActivity() {
                                 ReportItem(imageUri, reportLocation, discomfortType)
                             ReportRepository.reportList.add(reportItem)
 
-                            val intent =
-                                Intent(this@CameraActivity, MainActivity::class.java)
-                            intent.addFlags(
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            // ★ 서버 전송 성공 후 문자앱 열기
+                            val jinjuCityHallNumber = "01012345678" // TODO: 실제 진주시청 문자 번호로 교체
+                            sendReportSms(
+                                phoneNumber = jinjuCityHallNumber,
+                                address = reportLocation,
+                                category = discomfortType
                             )
-                            startActivity(intent)
-                            finish()
 
                             Toast.makeText(
                                 this@CameraActivity,
-                                "민원이 정상적으로 접수되었습니다.\n접수된 민원은 나의 민원에서 확인할 수 있습니다.",
+                                "민원 정보 전송 완료.\n문자 화면에서 전송 버튼을 눌러주세요.",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            // ★ CameraActivity 는 닫고, 뒤로가기로 나의 민원/메인으로 돌아가게
+                            finish()
                         } else {
                             Log.w(
                                 "CameraActivity",
@@ -348,6 +348,31 @@ class CameraActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    // ★ 문자앱 열어서 민원 내용 자동 작성하는 함수
+    private fun sendReportSms(
+        phoneNumber: String,
+        address: String,
+        category: String
+    ) {
+        val message = """
+            [도로이용불편 신고]
+            
+            위치: $address
+            유형: $category
+        """.trimIndent()
+
+        val uri = Uri.parse("smsto:$phoneNumber") // "sms:" 말고 "smsto:"가 안전함
+        val smsIntent = Intent(Intent.ACTION_SENDTO, uri).apply {
+            putExtra("sms_body", message)
+        }
+
+        if (smsIntent.resolveActivity(packageManager) != null) {
+            startActivity(smsIntent)
+        } else {
+            Toast.makeText(this, "문자 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

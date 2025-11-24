@@ -7,13 +7,38 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 public class SimpleImageSender {
     
-    // 서버 URL
-    private static final String SERVER_URL = "http://localhost:3000/api/receive-json";
-    // Android 에뮬레이터: "http://10.0.2.2:3000/api/receive-json"
-    // 실제 기기: "http://192.168.1.100:3000/api/receive-json"
+    // 현재 PC의 IP 주소를 동적으로 가져오는 함수
+    private static String getLocalIPAddress() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+                
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    if (address.isSiteLocalAddress() && !address.isLoopbackAddress()) {
+                        return address.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("IP 주소 가져오기 실패: " + e.getMessage());
+        }
+        return "localhost"; // IP를 찾을 수 없으면 localhost 반환
+    }
+    
+    // 동적으로 서버 URL 생성
+    private static final String SERVER_URL = "http://" + getLocalIPAddress() + ":3000/api/receive-json";
     
     public String sendBusinessData(
             String category,
@@ -101,6 +126,8 @@ public class SimpleImageSender {
     // 사용 예제
     public static void main(String[] args) {
         SimpleImageSender sender = new SimpleImageSender();
+        
+        System.out.println("서버 URL: " + SERVER_URL);
         
         // 실제 이미지 파일을 사용한 테스트
         String base64Image = sender.fileToBase64("simyoung.jpg");
