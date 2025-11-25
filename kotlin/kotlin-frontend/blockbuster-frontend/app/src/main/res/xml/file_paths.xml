@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- CameraActivity 에서 사용하는 externalMediaDirs.first() 경로 전체 허용 -->
+    <external-media-path
+        name="external_media"
+        path="." />
+</paths>
