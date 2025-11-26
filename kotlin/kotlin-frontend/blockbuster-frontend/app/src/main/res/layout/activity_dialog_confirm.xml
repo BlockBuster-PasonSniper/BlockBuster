@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 중앙 팝업 박스 -->
     <LinearLayout
         android:id="@+id/containerLayout"
         android:layout_width="350dp"
@@ -32,7 +32,7 @@
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/tvReportLocation"
@@ -42,15 +42,14 @@
             android:paddingBottom="8dp"
             android:text="location"
             android:textAlignment="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:textColor="#000000" />
 
         <ImageView
             android:id="@+id/ivAttachedImage"
             android:layout_width="match_parent"
             android:layout_height="170dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:background="@drawable/design_popup_image"
@@ -71,11 +70,11 @@
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:layout_margin="12dp"
-                android:textSize="19dp"
+                android:textSize="18sp"
                 android:text="이전"
                 android:background="@drawable/popup_button_design"
                 android:backgroundTint="@null"
-                app:backgroundTint="@null"/>
+                app:backgroundTint="@null" />
 
             <Button
                 android:id="@+id/btnSend"
@@ -83,16 +82,16 @@
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:layout_margin="12dp"
-                android:textSize="19dp"
+                android:textSize="18sp"
                 android:text="전송"
                 android:background="@drawable/popup_button_design"
                 android:backgroundTint="@null"
-                app:backgroundTint="@null"/>
+                app:backgroundTint="@null" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Dialog 내부 로딩 오버레이 (전송 중 표시) -->
+    <!-- 🔄 Dialog 내부 로딩 오버레이 (전송 중 표시) -->
     <FrameLayout
         android:id="@+id/dialogLoading"
         android:layout_width="0dp"
@@ -111,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -119,7 +118,7 @@
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="200dp"
             android:text="전송 중..."
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
