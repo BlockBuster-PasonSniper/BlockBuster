@@ -1,3 +1,4 @@
+package com.example.hackatonproject
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class MyReportsAdapter(
         val imageView: ImageView = view.findViewById(R.id.report_image)
         val typeText: TextView = view.findViewById(R.id.report_type)
         val addressText: TextView = view.findViewById(R.id.report_address)
+        val indexText: TextView = view.findViewById(R.id.report_index)
     }
 
 
@@ -39,6 +41,7 @@ class MyReportsAdapter(
     //viewHolder의 사진정보를 이용해서 view를 보여줌
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = reports[position]
+        holder.indexText.text = "${position + 1}."
         holder.imageView.setImageURI(item.imageUri)
         holder.typeText.text = "불편유형: ${item.type}"
         holder.addressText.text = item.address

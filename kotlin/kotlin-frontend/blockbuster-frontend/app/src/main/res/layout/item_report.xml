@@ -1,38 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp">
-
-    <ImageView
-        android:id="@+id/report_image"
-        android:layout_width="144dp"
-        android:layout_height="162dp"
-        android:scaleType="centerCrop" />
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="4dp"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="161dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingStart="12dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/report_type"
-            android:layout_width="213dp"
-            android:layout_height="79dp"
-            android:text="민원 종류"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        <!-- 사진 영역 -->
+        <ImageView
+            android:id="@+id/report_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:background="#EEEEEE"
+            android:contentDescription="@string/app_name" />
 
-        <TextView
-            android:id="@+id/report_address"
-            android:layout_width="217dp"
-            android:layout_height="71dp"
-            android:text="민원 내용"
-            android:textSize="14sp" />
+        <!-- 텍스트 영역 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:gravity="center_vertical">
+
+            <!-- 🔹 인덱스 + 불편유형 한 줄 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- 인덱스 번호 (흰색, 파란 배경) -->
+                <TextView
+                    android:id="@+id/report_index"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="#0043FF"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp" />
+
+                <!-- 불편유형 텍스트 -->
+                <TextView
+                    android:id="@+id/report_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="불편유형: 도로 파손"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#0043FF"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+            </LinearLayout>
+
+            <!-- 주소 -->
+            <TextView
+                android:id="@+id/report_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="경상남도 진주시 ○○로 12"
+                android:textSize="14sp"
+                android:textColor="#0043FF"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
 
-    <!--나의 민원 탭 디자인 재구성 -->
+</androidx.cardview.widget.CardView>
