@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
-        <!-- 사진 영역 -->
+        <!-- 수정된 사진 영역 -->
         <ImageView
             android:id="@+id/report_image"
             android:layout_width="120dp"
