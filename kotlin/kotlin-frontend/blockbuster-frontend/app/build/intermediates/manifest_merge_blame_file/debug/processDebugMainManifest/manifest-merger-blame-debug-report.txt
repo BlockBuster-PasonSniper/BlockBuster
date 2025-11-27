@@ -9,212 +9,234 @@
 9        android:targetSdkVersion="35" />
 10
 11    <uses-permission android:name="android.permission.CAMERA" />
-11-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:5:5-65
-11-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:5:22-62
+11-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:5:5-65
+11-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:5:22-62
 12    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-12-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:6:5-76
-12-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:6:22-73
+12-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:6:5-76
+12-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:6:22-73
 13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-13-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:7:5-79
-13-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:7:22-76
+13-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:7:5-79
+13-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:7:22-76
 14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-14-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:8:5-81
-14-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:8:22-78
+14-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:8:5-81
+14-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:8:22-78
 15    <uses-permission android:name="android.permission.INTERNET" />
-15-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:9:5-67
-15-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:9:22-64
+15-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:9:5-67
+15-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:9:22-64
 16
 17    <uses-feature
-17-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:12:5-14:36
+17-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:12:5-14:36
 18        android:name="android.hardware.camera"
-18-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:13:9-47
+18-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:13:9-47
 19        android:required="false" />
-19-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:14:9-33
+19-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:14:9-33
 20
-21    <permission
-21-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:22:5-24:47
-22        android:name="com.example.hackatonproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-22-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:23:9-81
-23        android:protectionLevel="signature" />
-23-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:24:9-44
-24
-25    <uses-permission android:name="com.example.hackatonproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-25-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:26:5-97
-25-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:26:22-94
+21    <queries>
+21-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:22:5-26:15
+22        <intent>
+22-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:23:9-25:18
+23            <action android:name="androidx.camera.extensions.action.VENDOR_ACTION" />
+23-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:24:13-86
+23-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:24:21-83
+24        </intent>
+25    </queries>
 26
-27    <application
-27-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:16:5-47:19
-28        android:allowBackup="true"
-28-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:19:9-35
-29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-29-->[androidx.core:core:1.16.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
-30        android:dataExtractionRules="@xml/data_extraction_rules"
-30-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:20:9-65
-31        android:debuggable="true"
-32        android:extractNativeLibs="false"
-33        android:fullBackupContent="@xml/backup_rules"
-33-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:21:9-54
-34        android:icon="@mipmap/ic_launcher"
-34-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:22:9-43
-35        android:label="HackatonProject"
-35-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:23:9-40
-36        android:networkSecurityConfig="@xml/network_security_config"
-36-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:17:9-69
-37        android:roundIcon="@mipmap/ic_launcher_round"
-37-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:24:9-54
-38        android:supportsRtl="true"
-38-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:25:9-35
-39        android:testOnly="true"
-40        android:theme="@style/Theme.CapstonDesign.Project"
-40-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:26:9-59
-41        android:usesCleartextTraffic="true" >
-41-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:18:9-44
-42        <activity
-42-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:28:9-30:40
-43            android:name="com.example.hackatonproject.dialog_confirm"
-43-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:29:13-43
-44            android:exported="false" />
-44-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:30:13-37
-45        <activity android:name="com.example.hackatonproject.MyReportsActivity" />
-45-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:31:9-55
-45-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:31:19-52
-46        <activity
-46-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:33:9-35:40
-47            android:name="com.example.hackatonproject.CameraActivity"
-47-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:34:13-43
-48            android:exported="false" />
-48-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:35:13-37
-49        <activity
-49-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:36:9-46:20
-50            android:name="com.example.hackatonproject.MainActivity"
-50-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:37:13-41
-51            android:exported="true"
-51-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:38:13-36
-52            android:label="Hackathon Project"
-52-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:39:13-46
-53            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" >
-53-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:40:13-81
-54            <intent-filter>
-54-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:41:13-45:29
-55                <action android:name="android.intent.action.MAIN" />
-55-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:42:17-69
-55-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:42:25-66
+27    <permission
+27-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:22:5-24:47
+28        android:name="com.example.hackatonproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+28-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:23:9-81
+29        android:protectionLevel="signature" />
+29-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:24:9-44
+30
+31    <uses-permission android:name="com.example.hackatonproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+31-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:26:5-97
+31-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:26:22-94
+32
+33    <application
+33-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:16:5-57:19
+34        android:allowBackup="true"
+34-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:19:9-35
+35        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+35-->[androidx.core:core:1.16.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\5995ec8c02ec05e78441730da67f8267\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
+36        android:dataExtractionRules="@xml/data_extraction_rules"
+36-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:20:9-65
+37        android:debuggable="true"
+38        android:extractNativeLibs="false"
+39        android:fullBackupContent="@xml/backup_rules"
+39-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:21:9-54
+40        android:icon="@mipmap/ic_launcher"
+40-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:22:9-43
+41        android:label="HackatonProject"
+41-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:23:9-40
+42        android:networkSecurityConfig="@xml/network_security_config"
+42-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:17:9-69
+43        android:roundIcon="@mipmap/ic_launcher_round"
+43-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:24:9-54
+44        android:supportsRtl="true"
+44-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:25:9-35
+45        android:theme="@style/Theme.CapstonDesign.Project"
+45-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:26:9-59
+46        android:usesCleartextTraffic="true" >
+46-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:18:9-44
+47        <provider
+47-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:28:9-36:20
+48            android:name="androidx.core.content.FileProvider"
+48-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:29:13-62
+49            android:authorities="com.example.hackatonproject.fileprovider"
+49-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:30:13-75
+50            android:exported="false"
+50-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:31:13-37
+51            android:grantUriPermissions="true" >
+51-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:32:13-47
+52            <meta-data
+52-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:33:13-35:54
+53                android:name="android.support.FILE_PROVIDER_PATHS"
+53-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:34:17-67
+54                android:resource="@xml/file_paths" />
+54-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:35:17-51
+55        </provider>
 56
-57                <category android:name="android.intent.category.LAUNCHER" />
-57-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:44:17-77
-57-->C:\Users\PC -1\Documents\BlockBuster_e\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:44:27-74
-58            </intent-filter>
-59        </activity>
-60
-61        <service
-61-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:24:9-33:19
-62            android:name="androidx.camera.core.impl.MetadataHolderService"
-62-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:25:13-75
-63            android:enabled="false"
-63-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:26:13-36
-64            android:exported="false" >
-64-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:27:13-37
-65            <meta-data
-65-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:30:13-32:89
-66                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
-66-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:31:17-103
-67                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
-67-->[androidx.camera:camera-camera2:1.3.2] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:32:17-86
-68        </service>
-69
-70        <activity
-70-->[androidx.compose.ui:ui-tooling-android:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\441caa922a60655cb199b5d92359039b\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
-71            android:name="androidx.compose.ui.tooling.PreviewActivity"
-71-->[androidx.compose.ui:ui-tooling-android:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\441caa922a60655cb199b5d92359039b\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
-72            android:exported="true" />
-72-->[androidx.compose.ui:ui-tooling-android:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\441caa922a60655cb199b5d92359039b\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
-73        <activity
-73-->[androidx.compose.ui:ui-test-manifest:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\f7218dbb77d3022d64fab93e883ce996\transformed\ui-test-manifest-1.7.0\AndroidManifest.xml:23:9-25:39
-74            android:name="androidx.activity.ComponentActivity"
-74-->[androidx.compose.ui:ui-test-manifest:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\f7218dbb77d3022d64fab93e883ce996\transformed\ui-test-manifest-1.7.0\AndroidManifest.xml:24:13-63
-75            android:exported="true" />
-75-->[androidx.compose.ui:ui-test-manifest:1.7.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\f7218dbb77d3022d64fab93e883ce996\transformed\ui-test-manifest-1.7.0\AndroidManifest.xml:25:13-36
-76        <activity
-76-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\044b706d3555dc6c86855dd3b806d0e5\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:9-173
-77            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-77-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\044b706d3555dc6c86855dd3b806d0e5\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:19-85
-78            android:exported="false"
-78-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\044b706d3555dc6c86855dd3b806d0e5\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:146-170
-79            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-79-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\044b706d3555dc6c86855dd3b806d0e5\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:86-145
-80
-81        <meta-data
-81-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\a5e6407f8d0d3756d6e92196046603c8\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
-82            android:name="com.google.android.gms.version"
-82-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\a5e6407f8d0d3756d6e92196046603c8\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
-83            android:value="@integer/google_play_services_version" />
-83-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\a5e6407f8d0d3756d6e92196046603c8\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
-84
-85        <provider
-85-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-86            android:name="androidx.startup.InitializationProvider"
-86-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-87            android:authorities="com.example.hackatonproject.androidx-startup"
-87-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-88            android:exported="false" >
-88-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-89            <meta-data
-89-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-90                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-90-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-91                android:value="androidx.startup" />
-91-->[androidx.emoji2:emoji2:1.3.0] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-92            <meta-data
-92-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:29:13-31:52
-93                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-93-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:30:17-78
-94                android:value="androidx.startup" />
-94-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:31:17-49
-95            <meta-data
-95-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-96                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-96-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-97                android:value="androidx.startup" />
-97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-98        </provider>
-99
-100        <receiver
-100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-101            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-102            android:directBootAware="false"
-102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-103            android:enabled="true"
-103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-104            android:exported="true"
-104-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-105            android:permission="android.permission.DUMP" >
-105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-106            <intent-filter>
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-107                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-108            </intent-filter>
-109            <intent-filter>
-109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-110                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-111            </intent-filter>
-112            <intent-filter>
-112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-113                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-114            </intent-filter>
-115            <intent-filter>
-115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-116                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\PC -1\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-117            </intent-filter>
-118        </receiver>
-119    </application>
-120
-121</manifest>
+57        <activity
+57-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:38:9-40:40
+58            android:name="com.example.hackatonproject.dialog_confirm"
+58-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:39:13-43
+59            android:exported="false" />
+59-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:40:13-37
+60        <activity android:name="com.example.hackatonproject.MyReportsActivity" />
+60-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:41:9-55
+60-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:41:19-52
+61        <activity
+61-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:43:9-45:40
+62            android:name="com.example.hackatonproject.CameraActivity"
+62-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:44:13-43
+63            android:exported="false" />
+63-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:45:13-37
+64        <activity
+64-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:46:9-56:20
+65            android:name="com.example.hackatonproject.MainActivity"
+65-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:47:13-41
+66            android:exported="true"
+66-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:48:13-36
+67            android:label="Hackathon Project"
+67-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:49:13-46
+68            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" >
+68-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:50:13-81
+69            <intent-filter>
+69-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:51:13-55:29
+70                <action android:name="android.intent.action.MAIN" />
+70-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:52:17-69
+70-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:52:25-66
+71
+72                <category android:name="android.intent.category.LAUNCHER" />
+72-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:54:17-77
+72-->C:\Blockbuster_git\kotlin\kotlin-frontend\blockbuster-frontend\app\src\main\AndroidManifest.xml:54:27-74
+73            </intent-filter>
+74        </activity>
+75
+76        <uses-library
+76-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:29:9-31:40
+77            android:name="androidx.camera.extensions.impl"
+77-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:30:13-59
+78            android:required="false" />
+78-->[androidx.camera:camera-extensions:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\537d2c62498c941667d8ec046a101189\transformed\camera-extensions-1.3.2\AndroidManifest.xml:31:13-37
+79
+80        <service
+80-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:24:9-33:19
+81            android:name="androidx.camera.core.impl.MetadataHolderService"
+81-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:25:13-75
+82            android:enabled="false"
+82-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:26:13-36
+83            android:exported="false" >
+83-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:27:13-37
+84            <meta-data
+84-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:30:13-32:89
+85                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+85-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:31:17-103
+86                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+86-->[androidx.camera:camera-camera2:1.3.2] C:\Users\user240113\.gradle\caches\8.11.1\transforms\1121c8237fb50e9625b7bf95f0c37c99\transformed\camera-camera2-1.3.2\AndroidManifest.xml:32:17-86
+87        </service>
+88
+89        <activity
+89-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\f381d27b9cc9b79294b293646759b758\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+90            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+90-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\f381d27b9cc9b79294b293646759b758\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+91            android:exported="false"
+91-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\f381d27b9cc9b79294b293646759b758\transformed\play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+92            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+92-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\f381d27b9cc9b79294b293646759b758\transformed\play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+93
+94        <meta-data
+94-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\a2373ef1b9a38d9b299b4fe1d82f2e23\transformed\play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+95            android:name="com.google.android.gms.version"
+95-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\a2373ef1b9a38d9b299b4fe1d82f2e23\transformed\play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+96            android:value="@integer/google_play_services_version" />
+96-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\a2373ef1b9a38d9b299b4fe1d82f2e23\transformed\play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+97
+98        <provider
+98-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+99            android:name="androidx.startup.InitializationProvider"
+99-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+100            android:authorities="com.example.hackatonproject.androidx-startup"
+100-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+101            android:exported="false" >
+101-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+102            <meta-data
+102-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+103-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+104                android:value="androidx.startup" />
+104-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user240113\.gradle\caches\8.11.1\transforms\59593925cfa84e336a3243dabc7a7c14\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+105            <meta-data
+105-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\user240113\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:29:13-31:52
+106                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+106-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\user240113\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:30:17-78
+107                android:value="androidx.startup" />
+107-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\user240113\.gradle\caches\8.11.1\transforms\000d7bb29ba7fa1c2bf5982fc837fbf7\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:31:17-49
+108            <meta-data
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+109                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+110                android:value="androidx.startup" />
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+111        </provider>
+112
+113        <receiver
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+114            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+115            android:directBootAware="false"
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+116            android:enabled="true"
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+117            android:exported="true"
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+118            android:permission="android.permission.DUMP" >
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+120                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+123                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+126                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+127            </intent-filter>
+128            <intent-filter>
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+129                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\user240113\.gradle\caches\8.11.1\transforms\0e2e527cc661198bfa80f0b2e90cd8ae\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+130            </intent-filter>
+131        </receiver>
+132    </application>
+133
+134</manifest>

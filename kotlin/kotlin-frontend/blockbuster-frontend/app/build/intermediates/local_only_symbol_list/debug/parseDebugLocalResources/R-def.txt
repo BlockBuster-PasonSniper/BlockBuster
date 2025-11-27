@@ -9,7 +9,7 @@ color teal_700
 color white
 drawable button_design
 drawable design_camera_button
-drawable design_camera_capture
+drawable design_camera_capture_sec
 drawable design_camera_flash
 drawable design_camera_image
 drawable design_camera_info
@@ -66,4 +66,5 @@ string category_label
 style Theme.CapstonDesign.Project
 xml backup_rules
 xml data_extraction_rules
+xml file_paths
 xml network_security_config

@@ -3043,7 +3043,7 @@ drawable common_google_signin_btn_text_light_focused
 drawable common_google_signin_btn_text_light_normal
 drawable common_google_signin_btn_text_light_normal_background
 drawable design_camera_button
-drawable design_camera_capture
+drawable design_camera_capture_sec
 drawable design_camera_flash
 drawable design_camera_image
 drawable design_camera_info
@@ -3290,6 +3290,7 @@ id clip_horizontal
 id clip_vertical
 id clockwise
 id closest
+id coil_request_manager
 id collapseActionView
 id compatible
 id compose_view_saveable_id_tag
@@ -5468,4 +5469,5 @@ styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration
 styleable include constraintSet
 xml backup_rules
 xml data_extraction_rules
+xml file_paths
 xml network_security_config

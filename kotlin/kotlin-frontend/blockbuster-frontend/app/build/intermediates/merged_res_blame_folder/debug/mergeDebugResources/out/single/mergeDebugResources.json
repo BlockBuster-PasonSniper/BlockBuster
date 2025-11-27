@@ -1,158 +1,162 @@
 [
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xxhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_image.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_image.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-mdpi/ic_launcher_round.webp"
+        "merged": "com.example.hackatonproject.app-debug-4:/xml_file_paths.xml.flat",
+        "source": "com.example.hackatonproject.app-main-6:/xml/file_paths.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xxxhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_img.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\img.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_x.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_x.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xxxhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\ic_launcher_background.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_logo_image.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/logo_image.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_activity_dialog_last.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\activity_dialog_last.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_activity_main.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/activity_main.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_main_background_gradient.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\main_background_gradient.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-mdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-hdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-hdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_button.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_button.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_popup_image.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_popup_image.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_popup_button_design.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\popup_button_design.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_logo_clipboard.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/logo_clipboard.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-mdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_activity_my_reports.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/activity_my_reports.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\ic_launcher_foreground.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_activity_dialog_confirm.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/activity_dialog_confirm.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_logo_camera.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/logo_camera.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_dialog_ok.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_dialog_ok.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_popup_design.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/popup_design.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_popup_design.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\popup_design.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/xml_backup_rules.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/xml/backup_rules.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_capture_sec.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_capture_sec.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-mdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_logo_clipboard.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\logo_clipboard.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_capture.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_capture.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\xml\\data_extraction_rules.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/ic_launcher_foreground.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_image.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_image.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/xml_network_security_config.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/xml/network_security_config.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_item_report.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\item_report.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xxhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_logo_image.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\logo_image.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_item_report.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/item_report.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-hdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_main_background_gradient.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/main_background_gradient.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_popup_image.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_popup_image.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_popup_button_design.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/popup_button_design.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_flash.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_flash.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_x.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_x.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_logo_camera.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\logo_camera.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_info.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_info.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_button.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_button.png"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_activity_camera.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/activity_camera.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_activity_camera.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\activity_camera.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_dialog_ok.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_dialog_ok.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_activity_dialog_confirm.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\activity_dialog_confirm.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/layout_activity_dialog_last.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/layout/activity_dialog_last.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_button_design.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/button_design.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_ic_launcher_background.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/ic_launcher_background.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-xhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-hdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\xml\\backup_rules.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_design_camera_flash.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/design_camera_flash.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\mipmap-xxxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\layout_activity_my_reports.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\layout\\activity_my_reports.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/xml_data_extraction_rules.xml.flat",
-        "source": "com.example.hackatonproject.app-main-71:/xml/data_extraction_rules.xml"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\xml_network_security_config.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\xml\\network_security_config.xml"
     },
     {
-        "merged": "com.example.hackatonproject.app-debug-69:/drawable_img.png.flat",
-        "source": "com.example.hackatonproject.app-main-71:/drawable/img.png"
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_design_camera_info.png.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\design_camera_info.png"
+    },
+    {
+        "merged": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-debug-4:\\drawable_button_design.xml.flat",
+        "source": "C:\\Users\\user240113\\.gradle\\daemon\\8.11.1\\com.example.hackatonproject.app-main-6:\\drawable\\button_design.xml"
     }
 ]
