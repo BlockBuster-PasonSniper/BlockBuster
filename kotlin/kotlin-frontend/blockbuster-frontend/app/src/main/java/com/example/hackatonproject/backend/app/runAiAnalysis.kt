@@ -19,9 +19,11 @@ data class AiResult(
 
 fun runAiAnalysis(context: Context, imagePath: String): AiResult {
 
+    // ✅ TFLite 모델 출력: 8클래스 (D70까지 존재)
+    //   하지만 코드에서는 D70을 순위/출력에서 무시
     val classNames = listOf(
-        "D00", "D10", "D20", "D30", "D40",
-        "D50", "D60", "D70", "D80", "D90"
+        "D00", "D10", "D20", "D30",
+        "D40", "D50", "D60", "D70"
     )
 
     val CONFIDENCE_THRESHOLD = 0.7f
@@ -53,6 +55,14 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
     val outputShape = outputTensor.shape()
     Log.d("AI_DEBUG", "---- TFLite OUTPUT TENSOR ----")
     Log.d("AI_DEBUG", "shape = [${outputShape.joinToString()}]")
+
+    // (선택) 안전장치: 모델 출력 차원과 classNames.size가 다른 경우 로그 남기기
+    if (outputShape.size == 2 && outputShape[1] != classNames.size) {
+        Log.e(
+            "AI_DEBUG",
+            "모델 출력 클래스 수(${outputShape[1]})와 classNames.size(${classNames.size})가 다릅니다!"
+        )
+    }
 
     val (inputHeight, inputWidth, inputChannels) = when (inputShape.size) {
         4 -> Triple(inputShape[1], inputShape[2], inputShape[3])
@@ -104,26 +114,32 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
     }
 
     // 3) 추론 실행
-    val output = Array(1) { FloatArray(classNames.size) }
+    val output = Array(1) { FloatArray(classNames.size) }   // 8개 출력
     interpreter.run(inputBuffer, output)
 
     val scores = output[0]
 
-    // 모든 클래스 score 로그
+    // 모든 클래스 score 로그 (D70 포함해서 그대로 출력은 함)
     Log.d("AI_DEBUG", "---- CLASS SCORES ----")
     scores.forEachIndexed { index, score ->
         val name = classNames.getOrElse(index) { "UNK$index" }
         Log.d("AI_DEBUG", "score[$index] ($name) = $score")
     }
 
-    // === 4) D20 제외 조건 로직 ===
+    // === 4) D20 제외 조건 + D70 무시 로직 ===
+
+    // 항상 D70은 순위 경쟁에서 제외
+    val indexD70 = classNames.indexOf("D70")
+    val candidateIndicesBase = scores.indices.filter { it != indexD70 }
+
+    // D20 인덱스
     val indexD20 = classNames.indexOf("D20")
 
-    // D20을 제외한 후보 클래스들
-    val nonD20Indices = scores.indices.filter { it != indexD20 }
+    // D20까지 제외한 후보 (D20 규칙 발동시 사용)
+    val nonD20Indices = candidateIndicesBase.filter { it != indexD20 }
 
-    // 조건에 쓸 클래스들: D00, D10, D30, D40, D50, D60, D70, D80, D90
-    val strongClasses = setOf("D00", "D10", "D30", "D40", "D50", "D60", "D70", "D80", "D90")
+    // strong 클래스: D00, D10, D30, D40, D50, D60 (D70은 여기서도 제외)
+    val strongClasses = setOf("D00", "D10", "D30", "D40", "D50", "D60")
     val strongIndices = strongClasses.mapNotNull { className ->
         classNames.indexOf(className).takeIf { it >= 0 }
     }
@@ -133,8 +149,8 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
         scores[idx] >= EXCLUDE_D20_THRESHOLD
     }
 
-    val predIndex = if (hasStrongHighConfidence) {
-        // 👉 규칙 발동: D20은 빼고 나머지 중에서 가장 높은 score 선택
+    val predIndex = if (hasStrongHighConfidence && indexD20 >= 0) {
+        // 👉 규칙 발동: D20 + D70을 빼고 나머지 중에서 가장 높은 score 선택
         val idx = nonD20Indices.maxByOrNull { scores[it] } ?: -1
         Log.w(
             "AI_DEBUG",
@@ -143,8 +159,9 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
         )
         idx
     } else {
-        // 평소처럼 전체에서 가장 높은 score 선택
-        scores.indices.maxByOrNull { scores[it] } ?: -1
+        // 평소처럼 D70만 제외한 상태에서 가장 높은 score 선택
+        val idx = candidateIndicesBase.maxByOrNull { scores[it] } ?: -1
+        idx
     }
 
     if (predIndex == -1) {
@@ -176,16 +193,13 @@ fun runAiAnalysis(context: Context, imagePath: String): AiResult {
     //D40 포트홀
     //D50 횡단보도 흐림
     //D60 차선마모
-    //D70 맨홀뚜껑
-    //D80 패치된 도로구역
-    //D90 러팅 바퀴 자국에 의한 요철
+    //D70 맨홀뚜껑 (⚠ 코드상에선 순위/출력에서 이미 제외됨)
     val category = when (detailCodeRaw) {
         "D00", "D10", "D20" -> "도로 균열"
         "D40"               -> "포트홀"
-        "D30", "D80"        -> "보수 미흡(패치/보수)"
-        "D90"               -> "포장 변형"
+        "D30"               -> "보수 미흡(패치/보수)"
         "D50", "D60"        -> "표지시설 마모(횡단보도/차선)"
-        "D70"               -> "배수시설 문제(맨홀)"
+        "D70"               -> "배수시설 문제(맨홀)" // 이 분기는 사실상 도달하지 않음
         else                -> "기타 도로 이상"
     }
 

@@ -32,7 +32,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.load
-import androidx.camera.core.AspectRatio
 import com.example.hackatonproject.backend.app.runAiAnalysis
 import com.example.hackatonproject.backend.upload.sendToNodeServer
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -94,7 +93,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         previewView.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        previewView.scaleType = PreviewView.ScaleType.FIT_CENTER
+        previewView.scaleType = PreviewView.ScaleType.FILL_CENTER
 
         captureButton.setOnClickListener { takePhoto() }
 
@@ -124,20 +123,11 @@ class CameraActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
-            // 🔹 프리뷰와 캡처를 동일한 비율(16:9)로 맞춘다
-            val preview = Preview.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-                .setTargetRotation(previewView.display.rotation)
-                .build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+            }
 
-            imageCapture = ImageCapture.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-                .setTargetRotation(previewView.display.rotation)
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .build()
-
+            imageCapture = ImageCapture.Builder().build()
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
@@ -151,7 +141,6 @@ class CameraActivity : AppCompatActivity() {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
@@ -329,7 +318,7 @@ class CameraActivity : AppCompatActivity() {
                             ReportRepository.reportList.add(reportItem)
 
                             // ★ 서버 전송 성공 후 문자앱 열기 (LMS, 사진 포함)
-                            val jinjuCityHallNumber = "01012345678" // TODO: 실제 진주시청 문자 번호로 교체
+                            val jinjuCityHallNumber = "01095363324" // TODO: 실제 진주시청 문자 번호로 교체
                             sendReportLms(
                                 phoneNumber = jinjuCityHallNumber,
                                 address = reportLocation,
