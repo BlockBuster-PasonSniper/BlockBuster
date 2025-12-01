@@ -185,6 +185,84 @@ app.post("/api/receive-json", async (req, res) => {
   }
 });
 
+// --- API 엔드포인트: 개별 레코드 처리 (삭제) ---
+app.delete("/api/records/:id", (req, res) => {
+  const recordId = Number(req.params.id);
+
+  if (!Number.isFinite(recordId)) {
+    return res.status(400).json({
+      success: false,
+      message: "유효한 ID가 필요합니다.",
+    });
+  }
+
+  if (!fs.existsSync(OUTPUT_JSON_PATH)) {
+    return res.status(404).json({
+      success: false,
+      message: "삭제할 데이터가 없습니다.",
+    });
+  }
+
+  try {
+    const fileContent = fs.readFileSync(OUTPUT_JSON_PATH, "utf8");
+    const parsed = JSON.parse(fileContent);
+    const records = Array.isArray(parsed)
+      ? parsed
+      : Array.isArray(parsed.records)
+      ? parsed.records
+      : [];
+
+    const targetIndex = records.findIndex(
+      (record) => Number(record.id) === recordId
+    );
+
+    if (targetIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "해당 ID의 레코드를 찾을 수 없습니다.",
+      });
+    }
+
+    const [removedRecord] = records.splice(targetIndex, 1);
+
+    if (removedRecord?.pic?.startsWith("/uploads/")) {
+      const imagePath = path.join(
+        PUBLIC_DIR,
+        removedRecord.pic.replace(/^\//, "")
+      );
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    const updatedData = {
+      totalCount: records.length,
+      lastUpdated: new Date().toISOString(),
+      records,
+    };
+
+    fs.writeFileSync(
+      OUTPUT_JSON_PATH,
+      JSON.stringify(updatedData, null, 2),
+      "utf8"
+    );
+
+    console.log(`✅ 레코드 처리 완료: ${recordId}`);
+
+    return res.status(200).json({
+      success: true,
+      message: "레코드가 처리되었습니다.",
+      recordId,
+    });
+  } catch (error) {
+    console.error("레코드 삭제 중 오류:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: `레코드 삭제 중 오류 발생: ${error.message}`,
+    });
+  }
+});
+
 // --- 서버 실행 ---
 app.listen(port, () => {
   console.log(`\n서버가 실행 중입니다:`);

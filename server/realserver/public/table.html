@@ -3,211 +3,446 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>데이터 테이블 뷰어</title>
+    <title>민원 접수 현황</title>
     <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --accent: #0f172a;
+        --surface: #ffffff;
+        --muted: #94a3b8;
+        --border: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f5f5f5;
+        font-family: "Segoe UI", "Pretendard", "Noto Sans KR", sans-serif;
+        margin: 0;
+        background: radial-gradient(circle at top, #dbeafe, #f8fafc 40%);
+        min-height: 100vh;
+        color: #0f172a;
       }
       .container {
-        max-width: 1200px;
+        max-width: 1180px;
         margin: 0 auto;
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 48px 20px 64px;
+      }
+      .dashboard-card {
+        background-color: var(--surface);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.12);
       }
       h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
+        margin: 0 0 12px;
+        font-size: 34px;
+        color: var(--accent);
       }
-      .info {
-        background-color: #e3f2fd;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        border-left: 4px solid #2196f3;
+      .subtitle {
+        margin: 0 0 34px;
+        color: #475569;
+      }
+      .meta-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .meta-pill {
+        background-color: #eef2ff;
+        color: #3730a3;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+      }
+      .meta-pill strong {
+        margin: 0 4px;
+      }
+      .stat-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-bottom: 32px;
+      }
+      .stat-card {
+        position: relative;
+        padding: 22px 24px;
+        border-radius: 18px;
+        background-color: var(--accent);
+        color: #fff;
+        overflow: hidden;
+      }
+      .stat-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at top right,
+          rgba(255, 255, 255, 0.35),
+          transparent 55%
+        );
+      }
+      .stat-card.highlight {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+      }
+      .stat-card h3 {
+        margin: 0;
+        font-size: 15px;
+        opacity: 0.85;
+      }
+      .stat-card p {
+        margin: 12px 0 0;
+        font-size: 36px;
+        font-weight: 700;
+      }
+      #categoryChips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .category-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background-color: #f4f7ff;
+        color: #1e1b4b;
+        font-size: 14px;
+        border: 1px solid #e0e7ff;
+      }
+      .category-chip span {
+        font-weight: 600;
+      }
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 26px;
+      }
+      button {
+        font-family: inherit;
+      }
+      .refresh-btn,
+      .reset-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 22px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .refresh-btn {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        box-shadow: 0 12px 20px rgba(37, 99, 235, 0.25);
+      }
+      .reset-btn {
+        background: #f8fafc;
+        color: #dc2626;
+        border: 1px solid #fee2e2;
+      }
+      .refresh-btn:hover,
+      .reset-btn:hover {
+        transform: translateY(-2px);
+      }
+      .table-wrapper {
+        overflow-x: auto;
+        border-radius: 16px;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+        background-color: var(--surface);
       }
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        min-width: 900px;
       }
       th,
       td {
-        border: 1px solid #ddd;
-        padding: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
         text-align: left;
+        font-size: 15px;
       }
       th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-        color: #495057;
+        background-color: #f8fafc;
+        color: #475569;
+        font-weight: 600;
       }
       tr:nth-child(even) {
-        background-color: #f8f9fa;
+        background-color: #fcfdff;
       }
       tr:hover {
-        background-color: #e8f4fd;
+        background-color: #eef2ff;
+      }
+      .pic-cell {
+        width: 120px;
       }
       .pic-cell img {
-        max-width: 80px;
-        max-height: 80px;
+        width: 90px;
+        height: 70px;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: 10px;
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
         cursor: pointer;
+        transition: transform 0.2s ease;
       }
       .pic-cell img:hover {
-        transform: scale(1.1);
-        transition: transform 0.2s;
-      }
-      .refresh-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-bottom: 20px;
-        margin-right: 10px;
-      }
-      .refresh-btn:hover {
-        background-color: #0056b3;
-      }
-      .reset-btn {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-bottom: 20px;
-      }
-      .reset-btn:hover {
-        background-color: #c82333;
-      }
-      .button-group {
-        margin-bottom: 20px;
-      }
-      .no-data {
-        text-align: center;
-        color: #666;
-        font-style: italic;
-        padding: 40px;
+        transform: scale(1.08);
       }
       .timestamp {
         font-size: 0.9em;
-        color: #666;
+        color: var(--muted);
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        background-color: #ecfeff;
+        color: #0369a1;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #0ea5e9;
+      }
+      .complete-btn {
+        border: none;
+        background: #f1f5f9;
+        color: #0f172a;
+        padding: 8px 16px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.15s ease;
+      }
+      .complete-btn:hover {
+        background: #d9e3f0;
+      }
+      .no-data {
+        text-align: center;
+        color: #64748b;
+        padding: 60px 20px;
+        font-style: italic;
+      }
+      @media (max-width: 768px) {
+        .dashboard-card {
+          padding: 28px 20px;
+        }
+        table {
+          min-width: 100%;
+        }
+        .button-group {
+          flex-direction: column;
+          align-items: flex-start;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>데이터베이스 테이블 뷰어</h1>
+      <div class="dashboard-card">
+        <h1>민원 접수 현황</h1>
+        <p class="subtitle">실시간 접수된 민원 데이터를 한눈에 확인하세요.</p>
 
-      <div class="info">
-        <strong>총 레코드 수:</strong> <span id="totalCount">0</span><br />
-        <strong>마지막 업데이트:</strong> <span id="lastUpdated">-</span>
-      </div>
+        <div class="meta-info">
+          <span class="meta-pill"
+            >총 접수 <strong id="totalCount">0</strong>건</span
+          >
+          <span class="meta-pill"
+            >마지막 업데이트 <strong id="lastUpdated">-</strong></span
+          >
+          <span class="meta-pill">자동 새로고침 1.5초</span>
+        </div>
 
-      <div class="button-group">
-        <button class="refresh-btn" onclick="loadData()">새로고침</button>
-        <button class="reset-btn" onclick="resetData()">데이터 초기화</button>
-      </div>
+        <div class="stat-grid">
+          <div class="stat-card highlight">
+            <h3>전체 접수</h3>
+            <p id="statTotal">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>오늘 접수된 민원</h3>
+            <p id="statToday">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>주요 유형</h3>
+            <div id="categoryChips"></div>
+          </div>
+        </div>
 
-      <div id="tableContainer">
-        <div class="no-data">데이터를 불러오는 중...</div>
+        <div class="button-group">
+          <button class="refresh-btn" onclick="loadData()">새로고침</button>
+          <button class="reset-btn" onclick="resetData()">데이터 초기화</button>
+        </div>
+
+        <div class="table-wrapper" id="tableContainer">
+          <div class="no-data">데이터를 불러오는 중...</div>
+        </div>
       </div>
     </div>
 
     <script>
+      function getComplaintType(record) {
+        if (!record) return "-";
+        const category = (record.category || "").toLowerCase();
+        const name = (record.name || "").toLowerCase();
+
+        if (category.includes("포트홀") || name.includes("포트홀")) {
+          return "포트홀";
+        }
+        if (category.includes("도로크랙") || name.includes("도로크랙")) {
+          return "도로크랙";
+        }
+        return record.category || record.name || "-";
+      }
+
       async function loadData() {
         try {
-          const response = await fetch("/data.json");
+          const response = await fetch("/data.json", { cache: "no-store" });
 
-          // data.json 파일이 존재하지 않는 경우 처리
           if (!response.ok) {
-            // 파일이 없을 때 기본값으로 설정
-            document.getElementById("totalCount").textContent = "0";
-            document.getElementById("lastUpdated").textContent = "-";
-            document.getElementById("tableContainer").innerHTML =
-              '<div class="no-data">저장된 데이터가 없습니다.</div>';
+            updateSummaryPlaceholders();
+            renderEmptyState();
             return;
           }
 
           const data = await response.json();
+          const records = Array.isArray(data.records) ? [...data.records] : [];
+          const totalCount = data.totalCount ?? records.length ?? 0;
 
-          // 정보 업데이트
-          document.getElementById("totalCount").textContent =
-            data.totalCount || 0;
+          document.getElementById("totalCount").textContent = totalCount;
+          document.getElementById("statTotal").textContent = totalCount;
           document.getElementById("lastUpdated").textContent = data.lastUpdated
             ? new Date(data.lastUpdated).toLocaleString("ko-KR")
             : "-";
 
-          // 테이블 생성
-          const tableContainer = document.getElementById("tableContainer");
-
-          if (!data.records || data.records.length === 0) {
-            tableContainer.innerHTML =
-              '<div class="no-data">저장된 데이터가 없습니다.</div>';
+          if (records.length === 0) {
+            document.getElementById("statToday").textContent = "0";
+            document.getElementById("categoryChips").innerHTML =
+              '<span class="category-chip">데이터 없음</span>';
+            renderEmptyState();
             return;
           }
 
-          let tableHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>카테고리</th>
-                                <th>주소</th>
-                                <th>이름</th>
-                                <th>전화번호</th>
-                                <th>사진</th>
-                                <th>등록시간</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+          const todayISO = new Date().toISOString().slice(0, 10);
+          const todayCount = records.filter((record) => {
+            if (!record.timestamp) return false;
+            const recordDate = new Date(record.timestamp)
+              .toISOString()
+              .slice(0, 10);
+            return recordDate === todayISO;
+          }).length;
+          document.getElementById("statToday").textContent = todayCount;
 
-          // 최신순으로 정렬 (가장 최근 데이터가 위로)
-          const sortedRecords = data.records.sort((a, b) => b.id - a.id);
+          const categoryCounts = records.reduce((acc, record) => {
+            const type = getComplaintType(record);
+            if (!type || type === "-") return acc;
+            acc[type] = (acc[type] || 0) + 1;
+            return acc;
+          }, {});
+          const categoryHTML =
+            Object.entries(categoryCounts)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 3)
+              .map(
+                ([label, count]) =>
+                  `<span class="category-chip">${label}<span>${count}</span></span>`
+              )
+              .join("") || '<span class="category-chip">데이터 없음</span>';
+          document.getElementById("categoryChips").innerHTML = categoryHTML;
 
-          sortedRecords.forEach((record) => {
-            tableHTML += `
-                        <tr>
-                            <td>${record.id}</td>
-                            <td>${record.category}</td>
-                            <td>${record.address}</td>
-                            <td><strong>${record.name}</strong></td>
-                            <td>${record.telno}</td>
-                            <td class="pic-cell">
-                                ${
-                                  record.pic
-                                    ? `<img src="${record.pic}" alt="${record.name}" onclick="openImage('${record.pic}')">`
-                                    : "이미지 없음"
-                                }
-                            </td>
-                            <td class="timestamp">${new Date(
-                              record.timestamp
-                            ).toLocaleString("ko-KR")}</td>
-                        </tr>
-                    `;
-          });
+          const sortedRecords = [...records].sort(
+            (a, b) => (b.id || 0) - (a.id || 0)
+          );
+          const tableRows = sortedRecords
+            .map((record) => {
+              const timestampText = record.timestamp
+                ? new Date(record.timestamp).toLocaleString("ko-KR")
+                : "-";
+              const complaintType = getComplaintType(record);
+              const photoCell = record.pic
+                ? `<img src="${record.pic}" alt="${
+                    complaintType || "민원"
+                  }" onclick="openImage('${record.pic}')">`
+                : "이미지 없음";
 
-          tableHTML += "</tbody></table>";
-          tableContainer.innerHTML = tableHTML;
+              return `
+                <tr>
+                  <td>${record.id ?? "-"}</td>
+                  <td>
+                    <span class="status-badge">
+                      <span class="status-dot"></span>${complaintType}
+                    </span>
+                  </td>
+                  <td>${record.address || "-"}</td>
+                  <td>${record.telno || "-"}</td>
+                  <td class="pic-cell">${photoCell}</td>
+                  <td class="timestamp">${timestampText}</td>
+                  <td>
+                    <button class="complete-btn" onclick="markAsProcessed(${
+                      record.id
+                    })">완료 처리</button>
+                  </td>
+                </tr>`;
+            })
+            .join("");
+
+          document.getElementById("tableContainer").innerHTML = `
+            <div class="table-wrapper-inner">
+              <table>
+                <thead>
+                  <tr>
+                    <th>민원 ID</th>
+                    <th>민원 유형</th>
+                    <th>주소</th>
+                    <th>연락처</th>
+                    <th>증빙 사진</th>
+                    <th>접수 일시</th>
+                    <th>처리 상태</th>
+                  </tr>
+                </thead>
+                <tbody>${tableRows}</tbody>
+              </table>
+            </div>`;
         } catch (error) {
           console.error("데이터 로드 실패:", error);
-          // 에러 발생 시에도 총 레코드 수를 0으로 설정
-          document.getElementById("totalCount").textContent = "0";
-          document.getElementById("lastUpdated").textContent = "-";
-          document.getElementById("tableContainer").innerHTML =
-            '<div class="no-data">데이터를 불러올 수 없습니다.</div>';
+          updateSummaryPlaceholders();
+          renderErrorState();
         }
+      }
+
+      function updateSummaryPlaceholders() {
+        document.getElementById("totalCount").textContent = "0";
+        document.getElementById("statTotal").textContent = "0";
+        document.getElementById("statToday").textContent = "0";
+        document.getElementById("lastUpdated").textContent = "-";
+        document.getElementById("categoryChips").innerHTML =
+          '<span class="category-chip">데이터 없음</span>';
+      }
+
+      function renderEmptyState() {
+        document.getElementById("tableContainer").innerHTML =
+          '<div class="no-data">저장된 민원 데이터가 없습니다.</div>';
+      }
+
+      function renderErrorState() {
+        document.getElementById("tableContainer").innerHTML =
+          '<div class="no-data">민원 데이터를 불러올 수 없습니다.</div>';
       }
 
       function openImage(src) {
@@ -215,31 +450,50 @@
       }
 
       async function resetData() {
-        if (!confirm("모든 데이터가 삭제됩니다. 정말 초기화하시겠습니까?")) {
+        if (!confirm("모든 데이터가 삭제됩니다. 초기화하시겠습니까?")) {
           return;
         }
 
         try {
-          const response = await fetch("/api/reset-data", {
-            method: "DELETE",
-          });
-
-          if (response.ok) {
-            alert("데이터가 성공적으로 초기화되었습니다.");
-            loadData(); // 테이블 새로고침
-          } else {
+          const response = await fetch("/api/reset-data", { method: "DELETE" });
+          if (!response.ok) {
             throw new Error("데이터 초기화에 실패했습니다.");
           }
+          alert("데이터가 초기화되었습니다.");
+          loadData();
         } catch (error) {
           console.error("Error:", error);
-          alert("데이터 초기화 중 오류가 발생했습니다.");
+          alert(error.message || "초기화 중 오류가 발생했습니다.");
         }
       }
 
-      // 페이지 로드 시 데이터 불러오기
-      document.addEventListener("DOMContentLoaded", loadData);
+      async function markAsProcessed(recordId) {
+        if (!recordId) {
+          alert("유효한 민원 ID가 없습니다.");
+          return;
+        }
+        if (!confirm("해당 민원을 처리 완료로 표시할까요?")) {
+          return;
+        }
 
-      // 5초마다 자동 새로고침
+        try {
+          const response = await fetch(`/api/records/${recordId}`, {
+            method: "DELETE",
+          });
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+              errorData.message || "처리 중 오류가 발생했습니다."
+            );
+          }
+          loadData();
+        } catch (error) {
+          console.error("처리완료 중 오류:", error);
+          alert(error.message || "처리 중 오류가 발생했습니다.");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadData);
       setInterval(loadData, 1500);
     </script>
   </body>
