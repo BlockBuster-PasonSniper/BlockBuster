@@ -32,6 +32,12 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.load
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.io.FileOutputStream
+import kotlin.math.min
+import android.graphics.Matrix
+import android.media.ExifInterface
 import androidx.camera.core.AspectRatio
 import com.example.hackatonproject.backend.app.runAiAnalysis
 import com.example.hackatonproject.backend.upload.sendToNodeServer
@@ -182,11 +188,81 @@ class CameraActivity : AppCompatActivity() {
                     allOf = [Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION]
                 )
+
+                // 384 x 384 resizing  -> 2025-12-02
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    try {
+                        // 1) 저장된 파일을 Bitmap으로 읽기
+                        val originalBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                            ?: run {
+                                Toast.makeText(
+                                    this@CameraActivity,
+                                    "이미지 로드 실패",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return
+                            }
+
+                        // 2) EXIF 기준으로 회전 보정
+                        val rotatedBitmap = rotateBitmapIfRequired(photoFile, originalBitmap)
+
+                        // 3) 정사각형으로 중앙 크롭 (반드시 rotatedBitmap 기준!!)
+                        val minSide = min(rotatedBitmap.width, rotatedBitmap.height)
+                        val x = (rotatedBitmap.width - minSide) / 2
+                        val y = (rotatedBitmap.height - minSide) / 2
+
+                        val squareBitmap = Bitmap.createBitmap(rotatedBitmap, x, y, minSide, minSide)
+
+                        // 4) 384 x 384 로 리사이즈
+                        val resizedBitmap = Bitmap.createScaledBitmap(squareBitmap, 384, 384, true)
+
+                        // 5) 같은 파일에 덮어쓰기
+                        FileOutputStream(photoFile).use { out ->
+                            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e("CameraActivity", "이미지 리사이즈 실패", e)
+                        Toast.makeText(
+                            this@CameraActivity,
+                            "이미지 리사이즈 중 오류 발생",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    // 6) 최종적으로 384x384 + 바로 선 이미지로 후속 처리
                     getLocationAndSend(photoFile)
                 }
+
+
             }
         )
+    }
+    private fun rotateBitmapIfRequired(photoFile: File, bitmap: Bitmap): Bitmap {
+        return try {
+            val exif = ExifInterface(photoFile.absolutePath)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
+
+            val matrix = Matrix()
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+                else -> { /* 회전 필요 없음 */ }
+            }
+
+            if (matrix.isIdentity) {
+                bitmap
+            } else {
+                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            }
+        } catch (e: Exception) {
+            Log.e("CameraActivity", "EXIF 회전 처리 실패", e)
+            bitmap  // 실패하면 그냥 원본 그대로 사용
+        }
     }
 
     @RequiresPermission(
