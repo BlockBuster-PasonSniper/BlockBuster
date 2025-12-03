@@ -8,7 +8,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Telephony
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -328,10 +327,10 @@ class CameraActivity : AppCompatActivity() {
                                 ReportItem(imageUri, reportLocation, discomfortType)
                             ReportRepository.reportList.add(reportItem)
 
-                            // ★ 서버 전송 성공 후 문자앱 열기 (LMS, 사진 포함)
-                            val jinjuCityHallNumber = "01012345678" // TODO: 실제 진주시청 문자 번호로 교체
-                            sendReportLms(
-                                phoneNumber = jinjuCityHallNumber,
+                            // ★ 서버 전송 성공 후 이메일 앱 열기 (사진 첨부 포함)
+                            val cityHallEmail = "honeyfog00@gmail.com" // TODO: 실제 민원 담당 이메일로 교체
+                            sendReportEmail(
+                                toEmail = cityHallEmail,
                                 address = reportLocation,
                                 category = discomfortType,
                                 imageFile = imageFile
@@ -339,7 +338,7 @@ class CameraActivity : AppCompatActivity() {
 
                             Toast.makeText(
                                 this@CameraActivity,
-                                "민원 정보 전송 완료.\n문자 화면에서 전송 버튼을 눌러주세요.",
+                                "민원 정보 전송 완료.\n이메일 화면에서 전송 버튼을 눌러주세요.",
                                 Toast.LENGTH_SHORT
                             ).show()
 
@@ -381,16 +380,18 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    // ★ 문자앱 열어서 민원 내용 + 사진까지 자동 작성하는 함수 (LMS/MMS)
-    private fun sendReportLms(
-        phoneNumber: String,
+    // ★ 이메일 앱 열어서 민원 내용 + 사진까지 자동 작성하는 함수
+    private fun sendReportEmail(
+        toEmail: String,   // 받는 사람 이메일 (ex. 민원 담당 부서 이메일)
         address: String,
         category: String,
         imageFile: File
     ) {
-        val message = """
+        val subject = "[도로이용불편 신고]"
+
+        val body = """
             [도로이용불편 신고]
-            
+
             위치: $address
             유형: $category
         """.trimIndent()
@@ -398,37 +399,36 @@ class CameraActivity : AppCompatActivity() {
         // File → content:// URI 로 변환 (다른 앱에 전달용)
         val imageUri: Uri = FileProvider.getUriForFile(
             this,
-            "$packageName.fileprovider",   // ← 여기만 이렇게 변경
+            "$packageName.fileprovider",
             imageFile
         )
 
+        // 이메일 인텐트 구성
         val intent = Intent(Intent.ACTION_SEND).apply {
-            // MMS/LMS 전송용 MIME 타입
+            // 메일 + 이미지 첨부
             type = "image/*"
 
-            // 수신 번호
-            putExtra("address", phoneNumber)
+            // 받는 사람 이메일
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(toEmail))
 
-            // 문자 내용
-            putExtra("sms_body", message)
+            // 제목
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+
+            // 본문
+            putExtra(Intent.EXTRA_TEXT, body)
 
             // 이미지 첨부
             putExtra(Intent.EXTRA_STREAM, imageUri)
 
-            // 다른 앱(문자 앱)이 이 URI를 읽을 수 있도록 권한 부여
+            // 다른 앱(메일 앱)이 이 URI를 읽을 수 있도록 권한 부여
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        // 기본 문자 앱으로 바로 열기 (있으면)
-        val defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this)
-        if (defaultSmsPackage != null) {
-            intent.setPackage(defaultSmsPackage)
-        }
-
+        // 이메일 앱 선택해서 열기
         if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
+            startActivity(Intent.createChooser(intent, "이메일 앱을 선택하세요"))
         } else {
-            Toast.makeText(this, "문자 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "이메일 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }
