@@ -33,7 +33,6 @@ import androidx.core.content.FileProvider
 import coil.load
 import androidx.camera.core.AspectRatio
 import com.example.hackatonproject.backend.app.runAiAnalysis
-import com.example.hackatonproject.backend.upload.sendToNodeServer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.*
@@ -298,133 +297,81 @@ class CameraActivity : AppCompatActivity() {
             btnSend.isEnabled = false
             btnPrev.isEnabled = false
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val imageFile = File(photoPath)
+            // ✅ Node 서버 사용 없이, 바로 이메일 앱 + 로컬 리스트 추가
+            val imageFile = File(photoPath)
 
-                    Log.d(
-                        "CameraActivity",
-                        "📤 전송 준비: file=${imageFile.absolutePath}, category=$discomfortType, address=$reportLocation"
-                    )
+            Log.d(
+                "CameraActivity",
+                "📤 전송 준비(이메일): file=${imageFile.absolutePath}, category=$discomfortType, address=$reportLocation"
+            )
 
-                    val result = sendToNodeServer(
-                        imageFile = imageFile,
-                        predictedCategory = discomfortType,
-                        address = reportLocation
-                    )
+            // 리포트 목록에 추가 (앱 내 히스토리용)
+            val imageUri = Uri.fromFile(imageFile)
+            val reportItem = ReportItem(imageUri, reportLocation, discomfortType)
+            ReportRepository.reportList.add(reportItem)
 
-                    withContext(Dispatchers.Main) {
-                        // 로딩 종료 + 버튼 복구
-                        dialogLoading.visibility = View.GONE
-                        btnSend.isEnabled = true
-                        btnPrev.isEnabled = true
+            // 이메일 앱 열기 (사진 첨부 포함)
+            val cityHallEmail = "honeyfog00@gmail.com" // TODO: 실제 민원 담당 이메일로 교체
+            sendReportEmail(
+                toEmail = cityHallEmail,
+                address = reportLocation,
+                category = discomfortType,
+                imageFile = imageFile
+            )
 
-                        if (result) {
-                            Log.d("CameraActivity", "✅ 민원 전송 성공")
+            // 로딩 종료 + 버튼 복구
+            dialogLoading.visibility = View.GONE
+            btnSend.isEnabled = true
+            btnPrev.isEnabled = true
 
-                            val imageUri = Uri.fromFile(imageFile)
-                            val reportItem =
-                                ReportItem(imageUri, reportLocation, discomfortType)
-                            ReportRepository.reportList.add(reportItem)
+            Toast.makeText(
+                this@CameraActivity,
+                "이메일 화면에서 전송 버튼을 눌러주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
 
-                            // ★ 서버 전송 성공 후 이메일 앱 열기 (사진 첨부 포함)
-                            val cityHallEmail = "honeyfog00@gmail.com" // TODO: 실제 민원 담당 이메일로 교체
-                            sendReportEmail(
-                                toEmail = cityHallEmail,
-                                address = reportLocation,
-                                category = discomfortType,
-                                imageFile = imageFile
-                            )
-
-                            Toast.makeText(
-                                this@CameraActivity,
-                                "민원 정보 전송 완료.\n이메일 화면에서 전송 버튼을 눌러주세요.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            // ★ CameraActivity 닫기
-                            finish()
-                        } else {
-                            Log.w(
-                                "CameraActivity",
-                                "❌ 민원 전송 실패: 서버에서 false 반환"
-                            )
-
-                            Toast.makeText(
-                                this@CameraActivity,
-                                "민원 전송에 실패했습니다. 인터넷 연결을 확인해주세요.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        dialog.dismiss()
-                    }
-                } catch (e: Exception) {
-                    Log.e("CameraActivity", "🔥 전송 중 예외 발생", e)
-
-                    withContext(Dispatchers.Main) {
-                        // 로딩 종료 + 버튼 복구
-                        dialogLoading.visibility = View.GONE
-                        btnSend.isEnabled = true
-                        btnPrev.isEnabled = true
-
-                        Toast.makeText(
-                            this@CameraActivity,
-                            "민원 전송 중 오류가 발생했습니다: ${e.localizedMessage}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        dialog.dismiss()
-                    }
-                }
-            }
+            dialog.dismiss()
+            // ★ CameraActivity 닫기
+            finish()
         }
     }
 
-    // ★ 이메일 앱 열어서 민원 내용 + 사진까지 자동 작성하는 함수
     private fun sendReportEmail(
-        toEmail: String,   // 받는 사람 이메일 (ex. 민원 담당 부서 이메일)
+        toEmail: String,
         address: String,
         category: String,
         imageFile: File
     ) {
         val subject = "[도로이용불편 신고]"
-
         val body = """
-            [도로이용불편 신고]
+        [도로이용불편 신고]
 
-            위치: $address
-            유형: $category
-        """.trimIndent()
+        위치: $address
+        유형: $category
+    """.trimIndent()
 
-        // File → content:// URI 로 변환 (다른 앱에 전달용)
         val imageUri: Uri = FileProvider.getUriForFile(
             this,
             "$packageName.fileprovider",
             imageFile
         )
 
-        // 이메일 인텐트 구성
+        Log.d("CameraActivity", "📧 sendReportEmail 호출됨, to=$toEmail, uri=$imageUri")
+
         val intent = Intent(Intent.ACTION_SEND).apply {
-            // 메일 + 이미지 첨부
-            type = "image/*"
+            // 메일 클라이언트를 우선 대상으로
+            type = "message/rfc822"
 
-            // 받는 사람 이메일
             putExtra(Intent.EXTRA_EMAIL, arrayOf(toEmail))
-
-            // 제목
             putExtra(Intent.EXTRA_SUBJECT, subject)
-
-            // 본문
             putExtra(Intent.EXTRA_TEXT, body)
-
-            // 이미지 첨부
             putExtra(Intent.EXTRA_STREAM, imageUri)
 
             // 다른 앱(메일 앱)이 이 URI를 읽을 수 있도록 권한 부여
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        // 이메일 앱 선택해서 열기
+        // 이메일 앱만 선택되도록 유도
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(Intent.createChooser(intent, "이메일 앱을 선택하세요"))
         } else {

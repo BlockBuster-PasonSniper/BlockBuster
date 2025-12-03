@@ -13,8 +13,15 @@
         android:focusableInTouchMode="false"
         android:importantForAccessibility="no" />
 
-    <!-- 상단 바 (닫기 / 플래시 / 카메라 전환) -->
+    <!-- ✅ 가운데 프레임 (인식 영역 표시) : PreviewView "밖"에, 위에 겹치도록 -->
+    <FrameLayout
+        android:id="@+id/scanFrame"
+        android:layout_width="291dp"
+        android:layout_height="298dp"
+        android:layout_gravity="center"
+        android:background="@drawable/design_grid_640x640_white_on_transparent" />
 
+    <!-- 상단 바 (닫기 / 플래시 / 카메라 전환) -->
     <ImageButton
         android:id="@+id/btnClose"
         android:layout_width="48dp"
@@ -37,22 +44,13 @@
         android:src="@drawable/design_camera_flash"
         android:contentDescription="@string/camera_flash_toggle"/>
 
-    <!-- ===== 가운데 프레임 (인식 영역 표시) ===== -->
-
-    <FrameLayout
-        android:id="@+id/scanFrame"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_gravity="center"
-        android:background="@drawable/design_camera_capture_sec" />
-
     <!-- 동그란 촬영 버튼 -->
     <ImageButton
         android:id="@+id/captureButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/design_camera_button"
         android:contentDescription="@string/camera_take_picture"/>
 
