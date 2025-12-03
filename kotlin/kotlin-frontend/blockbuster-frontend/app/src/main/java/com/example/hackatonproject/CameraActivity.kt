@@ -51,6 +51,9 @@ class CameraActivity : AppCompatActivity() {
     private var camera: Camera? = null
     private var isFlashOn = false
 
+    // ✅ 지메일/메일 앱 다녀온 뒤에 안내를 띄우기 위한 플래그
+    private var waitingEmailResult = false
+
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -326,13 +329,13 @@ class CameraActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this@CameraActivity,
-                "이메일 화면에서 전송 버튼을 눌러주세요.",
+                "지메일 화면에서 전송 버튼을 눌러주세요.",
                 Toast.LENGTH_SHORT
             ).show()
 
             dialog.dismiss()
-            // ★ CameraActivity 닫기
-            finish()
+            // ❌ 여기서는 finish() 하지 않음
+            // 지메일/메일 앱 갔다가 돌아오면 onResume()에서 처리
         }
     }
 
@@ -358,8 +361,8 @@ class CameraActivity : AppCompatActivity() {
 
         Log.d("CameraActivity", "📧 sendReportEmail 호출됨, to=$toEmail, uri=$imageUri")
 
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            // 메일 클라이언트를 우선 대상으로
+        // ✅ 1) Gmail만 타겟으로 하는 Intent
+        val gmailIntent = Intent(Intent.ACTION_SEND).apply {
             type = "message/rfc822"
 
             putExtra(Intent.EXTRA_EMAIL, arrayOf(toEmail))
@@ -367,15 +370,51 @@ class CameraActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_TEXT, body)
             putExtra(Intent.EXTRA_STREAM, imageUri)
 
-            // 다른 앱(메일 앱)이 이 URI를 읽을 수 있도록 권한 부여
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+            // 🔥 패키지를 Gmail로 고정
+            setPackage("com.google.android.gm")
         }
 
-        // 이메일 앱만 선택되도록 유도
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(Intent.createChooser(intent, "이메일 앱을 선택하세요"))
+        if (gmailIntent.resolveActivity(packageManager) != null) {
+            // 지메일이 설치되어 있으면 바로 지메일 열기
+            waitingEmailResult = true
+            startActivity(gmailIntent)
         } else {
-            Toast.makeText(this, "이메일 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            // ❗지메일이 없으면 기존처럼 이메일 앱 선택창으로 fallback
+            val chooserIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822"
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(toEmail))
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, body)
+                putExtra(Intent.EXTRA_STREAM, imageUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            if (chooserIntent.resolveActivity(packageManager) != null) {
+                waitingEmailResult = true
+                startActivity(Intent.createChooser(chooserIntent, "이메일 앱을 선택하세요"))
+            } else {
+                Toast.makeText(this, "이메일 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // ✅ 메일 앱(지메일 포함)에서 돌아왔을 때 한 번만 안내
+        if (waitingEmailResult) {
+            waitingEmailResult = false
+
+            Toast.makeText(
+                this,
+                "이메일 전송을 완료하셨다면 신고가 접수되었습니다.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            // 필요하면 여기서 카메라 화면 종료
+            finish()
         }
     }
 }
